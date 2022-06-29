@@ -1,0 +1,35 @@
+{
+  "name": "mosfez-faust",
+  "version": "0.0.0",
+  "description": "A microtonal-aware synth engine library for web.",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./other": {
+      "default": "./dist/other.js",
+      "types": "./dist/other.d.ts"
+    }
+  },
+  "repository": "git@github.com:dxinteractive/mosfez-faust.git",
+  "author": "Damien Clarke <dxinteractive@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "prep": "yarn && cd demo && yarn && cd ../demo-yalc && yarn",
+    "build": "rm -rf dist && yarn rollup -c",
+    "test": "yarn jest",
+    "lint": "yarn eslint src",
+    "pretty": "yarn prettier --write .",
+    "update-yalc": "yalc publish --push && cd demo-yalc && yalc add mosfez-faust && yarn"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "yalcSig": "64559a3b55f2bca4a4895dd85b4953b5"
+}

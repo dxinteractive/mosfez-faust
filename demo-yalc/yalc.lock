@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "mosfez-faust": {
+      "signature": "64559a3b55f2bca4a4895dd85b4953b5",
+      "file": true
+    }
+  }
+}

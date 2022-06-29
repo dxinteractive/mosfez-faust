@@ -1,0 +1,56 @@
+{
+  "name": "mosfez-faust",
+  "version": "0.0.0",
+  "description": "Dunno.",
+  "main": "./dist/all.js",
+  "exports": {
+    "./all": {
+      "default": "./dist/all.js",
+      "types": "./dist/all.d.ts"
+    },
+    "./v0": {
+      "default": "./dist/v0.js",
+      "types": "./dist/v0.d.ts"
+    }
+  },
+  "repository": "git@github.com:dxinteractive/mosfez-faust.git",
+  "author": "Damien Clarke <dxinteractive@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "prep": "yarn && cd demo && yarn",
+    "build": "rm -rf dist && yarn rollup -c",
+    "test": "yarn jest",
+    "lint": "yarn eslint src",
+    "pretty": "yarn prettier --write .",
+    "prepare": "yarn build",
+    "update-yalc": "yalc publish --push && cd demo-yalc && yalc add mosfez-faust && yarn",
+    "copy-wasm": "cp ./node_modules/@grame/libfaust/libfaust-wasm.data ./src && cp ./node_modules/@grame/libfaust/libfaust-wasm.wasm ./src"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.1",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
+    "esbuild": "^0.14.42",
+    "eslint": "^8.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-react": "^7.29.4",
+    "jest": "^28.1.0",
+    "prettier": "2.6.2",
+    "rollup": "^2.75.3",
+    "rollup-plugin-dts": "^4.2.2",
+    "rollup-plugin-esbuild": "^4.9.1",
+    "ts-jest": "^28.0.3",
+    "ts-node": "^10.8.0",
+    "typescript": "^4.7.2"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@grame/libfaust": "^1.0.5"
+  }
+}
