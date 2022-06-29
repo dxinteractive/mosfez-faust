@@ -27,7 +27,7 @@
     "pretty": "yarn prettier --write .",
     "prepare": "yarn build",
     "update-yalc": "yalc publish --push && cd demo-yalc && yalc add mosfez-faust && yarn",
-    "copy-wasm": "cp ./node_modules/@grame/libfaust/libfaust-wasm.data ./src && cp ./node_modules/@grame/libfaust/libfaust-wasm.wasm ./src"
+    "copy-wasm": "cp ./node_modules/@grame/libfaust/libfaust-wasm.data ./src/faust && cp ./node_modules/@grame/libfaust/libfaust-wasm.wasm ./src/faust"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",

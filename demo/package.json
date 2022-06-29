@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "build-gh-pages": "tsc && vite build --base=/mosfez-faust/",
     "preview": "vite preview",
-    "copy-wasm": "cp ../src/libfaust-wasm.data public && cp ../src/libfaust-wasm.wasm public"
+    "copy-wasm": "cp ../src/faust/libfaust-wasm.data public && cp ../src/faust/libfaust-wasm.wasm public"
   },
   "dependencies": {
     "@react-hook/window-size": "^3.0.7",

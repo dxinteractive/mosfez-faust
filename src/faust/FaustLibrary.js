@@ -2379,6 +2379,7 @@ var Faust;
         }
     };
     var exports = createMethod();
+    exports.Faust = Faust;
     exports.sha256 = exports;
     exports.sha224 = createMethod(true);
     exports.sha256.hmac = createHmacMethod();
@@ -2389,11 +2390,11 @@ var Faust;
     // else {
         root.sha256 = exports.sha256;
         root.sha224 = exports.sha224;
-        // if (AMD) {
-        //     define(function () {
-        //         return exports;
-        //     });
-        // }
+    //     if (AMD) {
+    //         define(function () {
+    //             return exports;
+    //         });
+    //     }
     // }
 })();
 
