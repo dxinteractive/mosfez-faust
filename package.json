@@ -2,15 +2,19 @@
   "name": "mosfez-faust",
   "version": "0.0.0",
   "description": "Dunno.",
-  "main": "./dist/all.js",
+  "main": "./dist/faust.js",
   "exports": {
-    "./all": {
-      "default": "./dist/all.js",
-      "types": "./dist/all.d.ts"
+    "./faust": {
+      "default": "./dist/faust.js",
+      "types": "./dist/faust.d.ts"
     },
-    "./v0": {
-      "default": "./dist/v0.js",
-      "types": "./dist/v0.d.ts"
+    "./touch-start": {
+      "default": "./dist/touch-start.js",
+      "types": "./dist/touch-start.d.ts"
+    },
+    "./convert": {
+      "default": "./dist/convert.js",
+      "types": "./dist/convert.d.ts"
     }
   },
   "repository": "git@github.com:dxinteractive/mosfez-faust.git",
@@ -30,6 +34,7 @@
     "copy-wasm": "cp ./node_modules/@grame/libfaust/libfaust-wasm.data ./src/faust && cp ./node_modules/@grame/libfaust/libfaust-wasm.wasm ./src/faust"
   },
   "devDependencies": {
+    "@types/audiobuffer-to-wav": "^1.0.2",
     "@types/jest": "^27.5.1",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
@@ -51,6 +56,7 @@
     "dist"
   ],
   "dependencies": {
-    "@grame/libfaust": "^1.0.5"
+    "@grame/libfaust": "^1.0.5",
+    "audiobuffer-to-wav": "^1.0.0"
   }
 }

@@ -5,7 +5,11 @@ import FaustModuleAny from "@grame/libfaust/libfaust-wasm";
 // @ts-ignore
 import { Faust as FaustAny } from "./FaustLibrary";
 import type { Faust as FaustType } from "./FaustLibrary.types";
-export type { MonoFactory, Compiler } from "./FaustLibrary.types";
+export type {
+  MonoFactory,
+  Compiler,
+  FaustMonoNode,
+} from "./FaustLibrary.types";
 
 type FaustModuleType = () => Promise<unknown>;
 

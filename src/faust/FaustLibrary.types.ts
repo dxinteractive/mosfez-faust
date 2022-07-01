@@ -322,7 +322,7 @@ type TFaustUIGroup = {
   label: string;
   items: TFaustUIItem[];
 };
-type TFaustUIType = TFaustUIGroupType | TFaustUIOutputType | TFaustUIInputType;
+// type TFaustUIType = TFaustUIGroupType | TFaustUIOutputType | TFaustUIInputType;
 
 /**
  * The Factory structure.
