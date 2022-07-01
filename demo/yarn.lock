@@ -708,20 +708,6 @@ define-properties@^1.1.3, define-properties@^1.1.4:
     has-property-descriptors "^1.0.0"
     object-keys "^1.1.1"
 
-dendriform-immer-patch-optimiser@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/dendriform-immer-patch-optimiser/-/dendriform-immer-patch-optimiser-2.1.2.tgz#baf836c698bbcbfa89aa158c02b33fd289411c6a"
-  integrity sha512-IGoxH1AsYMjwGnuRqCrCzJwWESdgRh9334hDxayRWj1Loa2QhyTiu5PcQ6i+b5YRHnkrFMrCIX5zpvnQTxBFuQ==
-
-dendriform@^3.4.2:
-  version "3.4.2"
-  resolved "https://registry.yarnpkg.com/dendriform/-/dendriform-3.4.2.tgz#acc66b7cb18c11b8fe0111cdb3ca7d165d914020"
-  integrity sha512-xNHrpptB2230AjGAEPHhaDDku9tCsqdU1MG2SAAakTIN6Cl1qRb+iQ+kSDOzmeBc0IEhifTJqUMyYRJjM5Z2xg==
-  dependencies:
-    dendriform-immer-patch-optimiser "^2.1.2"
-    immer "9.0.1"
-    shallow-equal "1.2.1"
-
 dir-glob@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/dir-glob/-/dir-glob-3.0.1.tgz#56dbf73d992a4a93ba1584f4534063fd2e41717f"
@@ -1296,11 +1282,6 @@ ignore@^5.2.0:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
 
-immer@9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.1.tgz#1116368e051f9a0fd188c5136b6efb74ed69c57f"
-  integrity sha512-7CCw1DSgr8kKYXTYOI1qMM/f5qxT5vIVMeGLDCDX8CSxsggr1Sjdoha4OhsP0AZ1UvWbyZlILHvLjaynuu02Mg==
-
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -1831,11 +1812,6 @@ semver@^7.3.7:
   integrity sha512-QlYTucUYOews+WeEujDoEGziz4K6c47V/Bd+LjSSYcA94p+DmINdf7ncaUinThfvZyu13lN9OY1XDxt8C0Tw0g==
   dependencies:
     lru-cache "^6.0.0"
-
-shallow-equal@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/shallow-equal/-/shallow-equal-1.2.1.tgz#4c16abfa56043aa20d050324efa68940b0da79da"
-  integrity sha512-S4vJDjHHMBaiZuT9NPb616CSmLf618jawtv3sufLl6ivK8WocjAo58cXwbRV1cgqxH0Qbv+iUt6m05eqEa2IRA==
 
 shebang-command@^2.0.0:
   version "2.0.0"
