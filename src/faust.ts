@@ -52,7 +52,12 @@ export default class Faust {
     return node;
   }
 
-  async renderOffline(dsp: string, sampleRate: number, bufferSize: number) {
+  async renderOffline(
+    dsp: string,
+    sampleRate: number,
+    bufferSize: number,
+    input?: Float32Array[]
+  ) {
     const { compiler } = await this.ready;
     const factory = await compiler.createMonoDSPFactory(
       "Faust",
@@ -66,7 +71,8 @@ export default class Faust {
       await FaustLibrary.createMonoFactory().createOfflineProcessor(
         factory,
         sampleRate,
-        bufferSize
+        bufferSize,
+        input
       );
 
     if (!offline) throw new Error("couldnt create offline processor");

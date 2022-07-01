@@ -2,9 +2,10 @@ export type DspDefinition = {
   id: string;
   name: string;
   description: string;
-  numberOfInputs: number;
-  numberOfOutputs: number;
-  outputLength: number;
-  sampleRate: number;
   dsp: string;
+  sampleRate: number;
+  input?: number[][];
+  output?: string[];
+  outputLength?: number;
+  expect?: Record<string, number[][]>;
 };

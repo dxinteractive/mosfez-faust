@@ -20,7 +20,9 @@ export function arrayToAudioBuffer(
   return buffer;
 }
 
-export function audioBufferToFloat32Array(audioBuffer: AudioBuffer) {
+export function audioBufferToFloat32Array(
+  audioBuffer: AudioBuffer
+): Float32Array[] {
   const channels: Float32Array[] = [];
   for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
     channels.push(audioBuffer.getChannelData(i));
@@ -28,12 +30,16 @@ export function audioBufferToFloat32Array(audioBuffer: AudioBuffer) {
   return channels;
 }
 
-export function audioBufferToArray(audioBuffer: AudioBuffer) {
-  const channels: number[][] = [];
-  for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
-    channels.push(Array.from(audioBuffer.getChannelData(i)));
-  }
-  return channels;
+export function arrayToFloat32Array(arr: number[][]): Float32Array[] {
+  return arr.map((arr) => new Float32Array(arr));
+}
+
+export function float32ArrayToArray(arr: Float32Array[]): number[][] {
+  return arr.map((arr) => Array.from(arr));
+}
+
+export function audioBufferToArray(audioBuffer: AudioBuffer): number[][] {
+  return float32ArrayToArray(audioBufferToFloat32Array(audioBuffer));
 }
 
 export function wavToBlob(wav: ArrayBuffer): Blob {

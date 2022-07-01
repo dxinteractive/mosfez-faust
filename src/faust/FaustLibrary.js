@@ -1434,11 +1434,17 @@ var Faust;
 var Faust;
 (function (Faust) {
     class FaustOfflineProcessorImp {
-        constructor(instance, buffer_size) {
+        constructor(instance, buffer_size, input) {
             this.fDSPCode = instance;
             this.fBufferSize = buffer_size;
             this.fInputs = new Array(this.fDSPCode.getNumInputs()).fill(null).map(() => new Float32Array(buffer_size));
             this.fOutputs = new Array(this.fDSPCode.getNumOutputs()).fill(null).map(() => new Float32Array(buffer_size));
+
+            for(let c = 0; c < input.length && this.fInputs.length; c++) {
+                for(let i = 0; i < input[c].length && this.fInputs[c].length; i++) {
+                    this.fInputs[c][i] = input[c][i];
+                }
+            }
         }
         plot(size) {
             const plotted = new Array(this.fDSPCode.getNumOutputs()).fill(null).map(() => new Float32Array(size));
@@ -1519,13 +1525,13 @@ var Faust;
                 }
             });
         }
-        createOfflineProcessor(factory, sample_rate, buffer_size) {
+        createOfflineProcessor(factory, sample_rate, buffer_size, input) {
             return __awaiter(this, void 0, void 0, function* () {
                 const instance = yield Faust.createGenerator().createAsyncMonoDSPInstance(factory);
                 const JSONObj = Faust.createFaustJSON(factory.json);
                 const sample_size = JSONObj.compile_options.match("-double") ? 8 : 4;
                 const mono_dsp = Faust.createMonoDSP(instance, sample_rate, sample_size, buffer_size);
-                return new Faust.FaustOfflineProcessorImp(mono_dsp, buffer_size);
+                return new Faust.FaustOfflineProcessorImp(mono_dsp, buffer_size, input || []);
             });
         }
         getFactory() {

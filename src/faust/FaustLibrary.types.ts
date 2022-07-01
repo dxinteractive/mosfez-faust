@@ -794,7 +794,8 @@ export interface MonoFactory {
   createOfflineProcessor(
     factory: Factory,
     sample_rate: number,
-    buffer_size: number
+    buffer_size: number,
+    input?: Float32Array[]
   ): Promise<FaustOfflineProcessor | null>;
 }
 

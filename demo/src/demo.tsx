@@ -6,6 +6,8 @@ import classes from "./demo.module.css";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
 
+import { float32ArrayToArray } from "mosfez-faust/convert";
+
 import {
   BrowserRouter,
   Routes,
@@ -86,8 +88,9 @@ function Dsp(props: DspProps) {
   const { dspDefinition } = props;
   const { name, description } = dspDefinition;
 
-  const output = useFaustOfflineRenderer(dspDefinition);
-  console.log("output", output?.[0]);
+  useFaustOfflineRenderer(dspDefinition);
+  // const output =
+  // result?.map((arr) => JSON.stringify(Array.from(arr))).join("\n") || "";
 
   return (
     <>
