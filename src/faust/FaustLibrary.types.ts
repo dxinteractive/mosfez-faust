@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 type FaustModule = unknown;
 type LibFaust = unknown;
 
