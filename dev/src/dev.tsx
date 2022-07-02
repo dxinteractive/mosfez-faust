@@ -8,7 +8,7 @@ import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
 
 import {
-  BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Outlet,
@@ -22,14 +22,14 @@ const baseUrl = import.meta.env.BASE_URL;
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter basename={baseUrl}>
+    <HashRouter basename={baseUrl}>
       <Routes>
         <Route path="/" element={<Main />}>
           <Route index element={<List />} />
           <Route path=":id" element={<DspRoute />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
 
