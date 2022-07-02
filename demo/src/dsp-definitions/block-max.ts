@@ -22,8 +22,9 @@ const dspDefinition: DspDefinition = {
   name: "Block max",
   description:
     "Finds the max value from a set of N parallel channels per N ticks",
-  sampleRate: 44100,
   dsp,
+  type: "offline",
+  sampleRate: 44100,
   input: [
     [4, 1, 2, 9, 1, 2, 0, 0, 0, 1, 2, 1, 10, 10, 10],
     [3, 4, 5, 3, 4, 3, 0, 1, 0, 3, 4, 4, 11, 11, 11],

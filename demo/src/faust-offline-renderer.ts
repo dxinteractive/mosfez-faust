@@ -74,6 +74,13 @@ export async function faustOfflineRender(
   return result;
 }
 
+function logChannels(
+  arr: Float32Array[] | number[][],
+  log: (msg: unknown) => void
+) {
+  arr.forEach((channel) => log(Array.from(channel)));
+}
+
 export function useFaustOfflineRenderer(
   dspDefinition: DspDefinition
 ): Output[] | undefined {
@@ -81,25 +88,20 @@ export function useFaustOfflineRenderer(
   const isStartedRef = useRef(false);
 
   useEffect(() => {
-    if (isStartedRef.current) return;
+    if (isStartedRef.current || dspDefinition.type !== "offline") return;
     isStartedRef.current = true;
+
     console.log("input:");
-    (dspDefinition.input ?? []).forEach((channel) => {
-      console.log(Array.from(channel));
-    });
+    logChannels(dspDefinition.input ?? [], console.log);
+
     faustOfflineRender(dspDefinition).then((output) => {
       output.forEach((item) => {
         console.log(`${item.name}:`);
-
-        item.output.forEach((channel) => {
-          console.log(Array.from(channel));
-        });
+        logChannels(item.output, console.log);
 
         if (item.expected && !item.passed) {
           console.warn("incorrect output - expected:");
-          item.expected.forEach((channel) => {
-            console.warn(Array.from(channel));
-          });
+          logChannels(item.expected, console.warn);
         }
       });
 

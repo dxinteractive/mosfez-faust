@@ -89,8 +89,6 @@ function Dsp(props: DspProps) {
   const { name, description } = dspDefinition;
 
   useFaustOfflineRenderer(dspDefinition);
-  // const output =
-  // result?.map((arr) => JSON.stringify(Array.from(arr))).join("\n") || "";
 
   return (
     <>

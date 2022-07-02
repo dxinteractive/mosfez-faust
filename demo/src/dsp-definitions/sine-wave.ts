@@ -9,9 +9,10 @@ const dspDefinition: DspDefinition = {
   id: "sine-wave",
   name: "Sine wave",
   description: "Makes a sine wave at 440Hz",
+  dsp,
+  type: "offline",
   outputLength: 10,
   sampleRate: 44100,
-  dsp,
 };
 
 export default dspDefinition;
