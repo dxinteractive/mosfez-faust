@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { DspDefinition } from "./types";
 
-import Faust, { FaustMonoNode } from "mosfez-faust/faust";
+import Faust, { FaustNode } from "mosfez-faust/faust";
 import touchStart from "mosfez-faust/touch-start";
 
 const audioContext = new window.AudioContext();
@@ -11,7 +11,7 @@ const faust = new Faust();
 
 export function useFaustLivePlayer(dspDefinition: DspDefinition) {
   const effectCountRef = useRef(0);
-  const audioNode = useRef<FaustMonoNode>();
+  const audioNode = useRef<FaustNode>();
 
   useEffect(() => {
     if (dspDefinition.type !== "live") return;

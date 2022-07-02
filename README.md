@@ -1,6 +1,6 @@
 # mosfez-faust
 
-Makes [Faust](https://faust.grame.fr/) a little nicer to use on the web, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the wasm Fuats compiler, wrapped up in a library with full typescript compatibility, ESM exports and no external file dependencies.
+Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the wasm Fuats compiler, wrapped up in a library with full typescript compatibility, ESM exports and no external file dependencies.
 
 **[See the development project deployed!](https://dxinteractive.github.io/mosfez-faust/)** (even though it's intended to be used locally)
 

@@ -1,14 +1,6 @@
-// import { FaustModule, Faust as FaustLibrary } from "./faust/faust-with-types";
-import type {
-  MonoFactory,
-  Compiler,
-  FaustMonoNode,
-} from "./faust/faust-with-types";
-export type { MonoFactory, Compiler, FaustMonoNode };
-
-export type ReadyResult = {
-  factory: MonoFactory;
-  compiler: Compiler;
+// this isn't complete
+export type FaustNode = AudioNode & {
+  destroy: () => void;
 };
 
 export default class Faust {
@@ -30,7 +22,7 @@ export default class Faust {
   async compileNode(
     audioContext: AudioContext | OfflineAudioContext,
     dsp: string
-  ): Promise<FaustMonoNode> {
+  ): Promise<FaustNode> {
     // const start = Date.now();
 
     const argv = ["-ftz", "2", "-I", "http://127.0.0.1:8000/../../libraries/"];

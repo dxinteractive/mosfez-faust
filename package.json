@@ -1,7 +1,7 @@
 {
   "name": "mosfez-faust",
   "version": "0.0.0",
-  "description": "Dunno.",
+  "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./dist/faust.js",
   "exports": {
     "./faust": {
