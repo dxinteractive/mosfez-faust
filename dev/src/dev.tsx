@@ -81,6 +81,11 @@ function DspRoute() {
   return <Dsp dspDefinition={dspDefinition} />;
 }
 
+const TYPE_DESCS = {
+  offline: "open your browser console to see DSP output",
+  live: "DSP will play sound once successfully compiled",
+};
+
 type DspProps = {
   dspDefinition: DspDefinition;
 };
@@ -97,7 +102,12 @@ function Dsp(props: DspProps) {
       <DspHeader>
         <strong>{name}</strong> - {description}
       </DspHeader>
-      <pre>{dsp}</pre>
+      <div className={classes.dspType}>
+        type: {dspDefinition.type} - {TYPE_DESCS[dspDefinition.type]}
+      </div>
+      <div className={classes.dspContent}>
+        <pre className={classes.dspPre}>{dsp}</pre>
+      </div>
     </>
   );
 }

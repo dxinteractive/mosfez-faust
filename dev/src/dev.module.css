@@ -3,8 +3,11 @@
 }
 
 .list {
+  margin-top: .5rem;
   padding-left: 2rem;
+  padding-top: 1rem;
   list-style-type: decimal-leading-zero;
+  border-top: 1px solid var(--colorBack3);
 }
 
 .listItem {
@@ -13,7 +16,6 @@
 
 .dspHeader {
   display: flex;
-  padding-bottom: 1rem;
 }
 
 .dspHeaderTitle {
@@ -22,4 +24,18 @@
 
 .dspHeaderBack {
   padding-left: 1rem;
+}
+
+.dspType {
+  font-size: 16px;
+  color: var(--colorText2);
+}
+
+.dspPre {
+  font-size: 14px;
+}
+
+.dspContent {
+  margin-top: 1rem;
+  border-top: 1px solid var(--colorBack3);
 }
