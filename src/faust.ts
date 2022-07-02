@@ -77,7 +77,7 @@ export default class Faust {
     _sampleRate: number,
     _bufferSize: number,
     _input?: Float32Array[]
-  ) {
+  ): Promise<Float32Array[]> {
     // const { compiler } = await this.ready;
     // const factory = await compiler.createMonoDSPFactory(
     //   "Faust",
@@ -94,5 +94,7 @@ export default class Faust {
     //   );
     // if (!offline) throw new Error("couldnt create offline processor");
     // return offline.plot(bufferSize);
+
+    return [];
   }
 }

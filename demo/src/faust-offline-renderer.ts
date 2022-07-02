@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import type { DspDefinition } from "./types";
+import type { DspDefinition, DspDefinitionOffline } from "./types";
 
 import Faust from "mosfez-faust/faust";
 import { arrayToFloat32Array } from "mosfez-faust/convert";
@@ -13,10 +13,10 @@ export type Output = {
   passed: boolean;
 };
 
-const cache = new Map<DspDefinition, Output[]>();
+const cache = new Map<DspDefinitionOffline, Output[]>();
 
 export async function faustOfflineRender(
-  dspDefinition: DspDefinition
+  dspDefinition: DspDefinitionOffline
 ): Promise<Output[]> {
   const resultFromCache = cache.get(dspDefinition);
   if (resultFromCache) return resultFromCache;
