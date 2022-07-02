@@ -39,7 +39,6 @@ export default class Faust {
     // @ts-ignore
     const { faust } = window;
 
-    // Dynamically create the Faust generated node from explicit DSP source in 'dsp_code'
     const factory = await new Promise((resolve) =>
       faust.createDSPFactory(dsp, argv, resolve)
     );

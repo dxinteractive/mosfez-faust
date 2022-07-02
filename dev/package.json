@@ -1,16 +1,20 @@
 {
-  "name": "demo",
+  "name": "dev",
   "private": true,
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build-gh-pages": "tsc && vite build --base=/mosfez-faust/",
+    "preview": "vite preview",
+    "copy-wasm": "cp ../src/faust/libfaust-wasm.data public && cp ../src/faust/libfaust-wasm.wasm public"
   },
   "dependencies": {
-    "mosfez-faust": "file:.yalc/mosfez-faust",
+    "@react-hook/window-size": "^3.0.7",
+    "clsx": "^1.1.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

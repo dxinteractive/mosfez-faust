@@ -24,13 +24,12 @@
     "node": ">=16"
   },
   "scripts": {
-    "prep": "yarn && cd demo && yarn",
+    "prep": "yarn && cd dev && yarn",
     "build": "rm -rf dist && yarn rollup -c",
     "test": "yarn jest",
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
     "prepare": "yarn build",
-    "update-yalc": "yalc publish --push && cd demo-yalc && yalc add mosfez-faust && yarn",
     "copy-wasm": "cp ./node_modules/@grame/libfaust/libfaust-wasm.data ./src/faust && cp ./node_modules/@grame/libfaust/libfaust-wasm.wasm ./src/faust"
   },
   "devDependencies": {

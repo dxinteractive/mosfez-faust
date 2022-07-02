@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./css/base.css";
-import classes from "./demo.module.css";
+import classes from "./dev.module.css";
 
 import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
@@ -87,7 +87,7 @@ type DspProps = {
 
 function Dsp(props: DspProps) {
   const { dspDefinition } = props;
-  const { name, description } = dspDefinition;
+  const { name, description, dsp } = dspDefinition;
 
   useFaustLivePlayer(dspDefinition);
   useFaustOfflineRenderer(dspDefinition);
@@ -97,6 +97,7 @@ function Dsp(props: DspProps) {
       <DspHeader>
         <strong>{name}</strong> - {description}
       </DspHeader>
+      <pre>{dsp}</pre>
     </>
   );
 }
