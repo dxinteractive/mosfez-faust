@@ -29,8 +29,7 @@
     "test": "yarn jest",
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
-    "prepare": "yarn build",
-    "copy-wasm": "cp ./node_modules/@grame/libfaust/libfaust-wasm.data ./src/faust && cp ./node_modules/@grame/libfaust/libfaust-wasm.wasm ./src/faust"
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@types/audiobuffer-to-wav": "^1.0.2",
@@ -55,7 +54,6 @@
     "dist"
   ],
   "dependencies": {
-    "@grame/libfaust": "^1.0.5",
     "audiobuffer-to-wav": "^1.0.0"
   }
 }
