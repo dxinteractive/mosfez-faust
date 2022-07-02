@@ -2,7 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import type { DspDefinition, DspDefinitionOffline } from "./types";
 
 import Faust from "mosfez-faust/faust";
-import { arrayToFloat32Array } from "mosfez-faust/convert";
+import {
+  arrayToFloat32Array,
+  arrayToAudioBuffer,
+  audioBufferToFloat32Array,
+} from "mosfez-faust/convert";
 
 const faust = new Faust();
 
@@ -24,35 +28,58 @@ export async function faustOfflineRender(
   const {
     outputLength,
     sampleRate,
+    channels,
     dsp,
     input = [],
     output = ["process"],
     expect,
   } = dspDefinition;
 
-  const inputFloat32 = input.map((arr) => new Float32Array(arr));
+  // const inputFloat32 = input.map((arr) => new Float32Array(arr));
   const outputLengthFromInput = input[0]?.length ?? 0;
 
   const result = await Promise.all(
     output.map(async (name) => {
-      let dspTrimmed = dsp;
+      let dspToCompile = dsp;
       if (name !== "process") {
         const lines = dsp.split("\n");
         const foundIndex = lines.findIndex((line) =>
           line.startsWith(`${name} `)
         );
-        dspTrimmed = [
+        dspToCompile = [
           ...lines.slice(0, foundIndex + 1),
           `process = ${name};`,
         ].join("\n");
       }
 
-      const output = await faust.renderOffline(
-        dspTrimmed,
-        sampleRate,
+      // const output = await faust.renderOffline(
+      //   dspToCompile,
+      //   sampleRate,
+      //   outputLength ?? outputLengthFromInput,
+      //   inputFloat32
+      // );
+
+      const offlineContext = new OfflineAudioContext(
+        channels,
         outputLength ?? outputLengthFromInput,
-        inputFloat32
+        sampleRate
       );
+
+      const node = await faust.compileNode(offlineContext, dspToCompile);
+
+      if (input.length === 0) {
+        node.connect(offlineContext.destination);
+      } else {
+        const source: AudioBufferSourceNode =
+          offlineContext.createBufferSource();
+        source.buffer = arrayToAudioBuffer(offlineContext, input);
+        source.connect(node);
+        node.connect(offlineContext.destination);
+        source.start();
+      }
+
+      const renderedBuffer = await offlineContext.startRendering();
+      const output = audioBufferToFloat32Array(renderedBuffer);
 
       const expected = expect ? arrayToFloat32Array(expect[name]) : undefined;
 

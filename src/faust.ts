@@ -31,25 +31,7 @@ export default class Faust {
     audioContext: AudioContext | OfflineAudioContext,
     dsp: string
   ): Promise<FaustMonoNode> {
-    // const { compiler, factory } = await this.ready;
-
-    // // const start = Date.now();
-
-    // const node = await factory.compileNode(
-    //   audioContext,
-    //   "Faust",
-    //   compiler,
-    //   dsp,
-    //   "-ftz 2",
-    //   false,
-    //   128
-    // );
-
-    // // const end = Date.now();
-    // // console.log("compilation time", end - start, "ms");
-
-    // if (!node) throw new Error("couldnt create dsp node");
-    // return node;
+    // const start = Date.now();
 
     const argv = ["-ftz", "2", "-I", "http://127.0.0.1:8000/../../libraries/"];
 
@@ -66,35 +48,11 @@ export default class Faust {
       faust.createDSPWorkletInstance(factory, audioContext, resolve)
     );
 
-    // throw new Error("couldnt create dsp node");
+    // const end = Date.now();
+    // console.log("compilation time", end - start, "ms");
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return node;
-  }
-
-  async renderOffline(
-    _dsp: string,
-    _sampleRate: number,
-    _bufferSize: number,
-    _input?: Float32Array[]
-  ): Promise<Float32Array[]> {
-    // const { compiler } = await this.ready;
-    // const factory = await compiler.createMonoDSPFactory(
-    //   "Faust",
-    //   dsp,
-    //   "-I libraries"
-    // );
-    // if (!factory) throw new Error("couldnt create factory");
-    // const offline =
-    //   await FaustLibrary.createMonoFactory().createOfflineProcessor(
-    //     factory,
-    //     sampleRate,
-    //     bufferSize,
-    //     input
-    //   );
-    // if (!offline) throw new Error("couldnt create offline processor");
-    // return offline.plot(bufferSize);
-
-    return [];
   }
 }

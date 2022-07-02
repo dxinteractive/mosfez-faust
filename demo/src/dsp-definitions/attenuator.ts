@@ -15,6 +15,7 @@ const dspDefinition: DspDefinition = {
     [4, 3, 2, 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5],
     [4, 3, 2, 1, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5],
   ],
+  channels: 2,
   sampleRate: 44100,
 };
 

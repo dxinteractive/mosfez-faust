@@ -11,6 +11,7 @@ export type DspDefinitionLive = DspDefinitionCommon & {
 
 export type DspDefinitionOffline = DspDefinitionCommon & {
   type: "offline";
+  channels: number;
   sampleRate: number;
   input?: number[][];
   output?: string[];

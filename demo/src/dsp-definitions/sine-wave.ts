@@ -13,6 +13,7 @@ const dspDefinition: DspDefinition = {
   type: "offline",
   outputLength: 10,
   sampleRate: 44100,
+  channels: 1,
 };
 
 export default dspDefinition;
