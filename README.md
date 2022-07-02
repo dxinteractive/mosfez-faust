@@ -1,12 +1,12 @@
 # mosfez-faust
 
-Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the wasm Fuats compiler, wrapped up in a library with full typescript compatibility, ESM exports and no external file dependencies.
+Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the Web Assembly Faust compiler, wrapped up in a library that'll have full typescript compatibility, ESM exports and no external file dependencies.
 
 **[See the development project deployed!](https://dxinteractive.github.io/mosfez-faust/)** (even though it's intended to be used locally)
 
 _It's early days so it's probably not finished and probably doesn't work or have fixed API or anything._
 
-- Only contains the `libfaust` compiler
+**Note:** "opinionated" means this library has a much narrower set of concerns than the original Faust webaudio API it's using. This is mainly just for compilation on the web, playback using `AudioWorket` nodes, no in-built-polyphonic compilation, some compilation options are set and inaccessible via this API.
 
 This is half done. Things to do later:
 
@@ -20,6 +20,8 @@ More things to do later:
 - compilation doesn't wait for faust to be ready, so you can sometimes beat it and it won't work
 - faust js files pollute the console with messages
 - faust js files are larger than the feature set I need, so I'll remove the unused. Then ruin all those savings by bundling wasm in js via base64 encoding
+- make faust js throw relevant errors rather than return `null`
+- try to get helpful messages returned when DSP contains syntax errors
 
 ## The mosfez-faust library
 
