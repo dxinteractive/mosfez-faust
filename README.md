@@ -1,8 +1,8 @@
 # mosfez-faust
 
-A microtonal-aware synth engine library for web.
+An opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), built with typescript compatibility, ESM exports and no external file dependencies.
 
-**[Play the demo!](https://dxinteractive.github.io/mosfez-faust/)**
+**[Use the demo!](https://dxinteractive.github.io/mosfez-faust/)**
 
 **It's being built right now so it's probaby not finished and probably doesn't work or have fixed API or anything.**
 
