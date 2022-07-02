@@ -1,6 +1,6 @@
 # mosfez-faust
 
-An opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), built with typescript compatibility, ESM exports and no external file dependencies.
+Makes Faust nicer to use on the web, and has a dev environment to programatically run values through dsp. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the wasm Fuats compiler, wrapped up in a library with full typescript compatibility, ESM exports and no external file dependencies.
 
 **[Use the demo!](https://dxinteractive.github.io/mosfez-faust/)**
 
