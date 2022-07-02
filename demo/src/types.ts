@@ -18,4 +18,4 @@ export type DspDefinitionOffline = DspDefinitionCommon & {
   expect?: Record<string, number[][]>;
 };
 
-export type DspDefinition = DspDefinitionOffline;
+export type DspDefinition = DspDefinitionOffline | DspDefinitionLive;

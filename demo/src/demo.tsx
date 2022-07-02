@@ -3,10 +3,9 @@ import ReactDOM from "react-dom/client";
 import "./css/base.css";
 import classes from "./demo.module.css";
 
+import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
-
-import { float32ArrayToArray } from "mosfez-faust/convert";
 
 import {
   BrowserRouter,
@@ -88,6 +87,7 @@ function Dsp(props: DspProps) {
   const { dspDefinition } = props;
   const { name, description } = dspDefinition;
 
+  useFaustLivePlayer(dspDefinition);
   useFaustOfflineRenderer(dspDefinition);
 
   return (
