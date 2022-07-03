@@ -27,12 +27,16 @@ export async function compile(
   );
 
   if (!factory) {
-    throw new Error("factory failed");
+    throw new Error(faust.error_msg);
   }
 
   const node = await new Promise((resolve) =>
     faust.createDSPWorkletInstance(factory, audioContext, resolve)
   );
+
+  if (!node) {
+    throw new Error(faust.error_msg);
+  }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

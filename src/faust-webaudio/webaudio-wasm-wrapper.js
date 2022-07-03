@@ -800,7 +800,7 @@ faust.readDSPFactoryFromMachineAux = function (
             callback(factory);
           })
           .catch(function (error) {
-            console.log(error);
+            // console.log(error);
             faust.error_msg = "Faust DSP factory cannot be compiled";
             callback(null);
           });
@@ -809,7 +809,7 @@ faust.readDSPFactoryFromMachineAux = function (
       }
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
       faust.error_msg = "Faust DSP factory cannot be compiled";
       callback(null);
     });
@@ -958,7 +958,7 @@ faust.createDSPInstance = function (factory, context, buffer_size, callback) {
   WebAssembly.instantiate(factory.module, importObject)
     .then((dsp_instance) => {
       var time2 = performance.now();
-      console.log("Instantiation duration : " + (time2 - time1));
+      // console.log("Instantiation duration : " + (time2 - time1));
 
       var sp;
       try {
@@ -1144,7 +1144,7 @@ faust.createDSPInstance = function (factory, context, buffer_size, callback) {
         var i;
 
         // Setup web audio context
-        console.log("buffer_size " + buffer_size);
+        // console.log("buffer_size " + buffer_size);
         sp.onaudioprocess = sp.compute;
 
         if (sp.numIn > 0) {
@@ -1378,7 +1378,7 @@ faust.createDSPInstance = function (factory, context, buffer_size, callback) {
       callback(sp);
     })
     .catch(function (error) {
-      console.log(error);
+      // console.log(error);
       faust.error_msg = "Faust DSP cannot be instantiated";
       callback(null);
     });
@@ -2110,8 +2110,8 @@ faust.createDSPWorkletInstance = function (factory, context, callback) {
         faust.createDSPWorkletInstanceAux(factory, context, callback);
       })
       .catch(function (error) {
-        console.log(error);
-        console.log("Faust mydsp cannot be loaded or compiled");
+        // console.log(error);
+        // console.log("Faust mydsp cannot be loaded or compiled");
         alert(error);
       });
   } else {
@@ -2210,8 +2210,8 @@ faust.createPolyDSPInstanceAux = function (
   // Resume audio context each time...
   context.resume();
 
-  var time2 = performance.now();
-  console.log("Instantiation duration : " + (time2 - time1));
+  // var time2 = performance.now();
+  // console.log("Instantiation duration : " + (time2 - time1));
 
   var sp;
   try {
@@ -2550,7 +2550,7 @@ faust.createPolyDSPInstanceAux = function (
     var i;
 
     // Setup web audio context
-    console.log("buffer_size " + buffer_size);
+    // console.log("buffer_size " + buffer_size);
     sp.onaudioprocess = sp.compute;
 
     if (sp.numIn > 0) {

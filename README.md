@@ -7,6 +7,7 @@ Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a littl
 - full typescript compatibility
 - ESM exports, so no need to add `<script>` tags
 - have any async functions chain seamlessly off any prior initialisation steps, so if a required resource is not yet ready, the API function simply waits until it is ready
+- error reporting is more idiomatic for JavaScript - error objects are thrown containing details of the problem when compilation does not work
 
 [See the dev project](https://dxinteractive.github.io/mosfez-faust/) - but keep in mind it's intended to be used locally.
 
