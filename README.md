@@ -24,9 +24,39 @@ More things to do later:
 - make faust js throw relevant errors rather than return `null`
 - try to get helpful messages returned when DSP contains syntax errors
 
-## The mosfez-faust library
+## Installation
 
-Description coming when the API design is nearing completion.
+**Note:** this isn't ready yet, but it's the plan.
+
+`npm install mosfez-faust` or `yarn add mosfez-faust`
+
+## Usage
+
+```js
+import { compile } from "mosfez-faust/faust";
+import { touchStart } from "mosfez-faust/touch-start";
+
+const audioContext = new window.AudioContext();
+touchStart(audioContext);
+
+async function startSines() {
+  const dsp = `
+    import("stdfaust.lib");
+    process = os.osc(440.0),os.osc(441.0);
+  `;
+
+  const node = await compile(audioContext, dsp);
+  node.connect(audioContext.destination);
+}
+```
+
+Also some general purpose web audio conversion utilities can be found at:
+
+```js
+import { * as conversions } from "mosfez-faust/convert";
+```
+
+See source code for details.
 
 ## The dev project
 
