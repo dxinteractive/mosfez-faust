@@ -531,9 +531,13 @@ faust.ready = faust_module.ready;
  * @param argv - an array of parameters to be given to the Faust compiler
  * @param callback - a callback taking the created DSP factory as parameter, or null in case of error
  */
+
+// REMOVED: Fausts inbuilt version of polyphony is good, but not required for this library
+/*
 faust.createPolyDSPFactory = function (code, argv, callback) {
   faust.createDSPFactoryAux(code, argv, false, callback);
 };
+*/
 
 /**
  * From a DSP source file, creates a 'self-contained' DSP source string where all needed librairies have been included.
@@ -2964,6 +2968,9 @@ faust.createPolyDSPInstanceAux = function (
  * @param polyphony - the number of polyphonic voices
  * @param callback - a callback taking the created ScriptProcessorNode as parameter, or null in case of error
  */
+
+// REMOVED: Fausts inbuilt version of polyphony is good, but not required for this library
+/*
 faust.createPolyDSPInstance = function (
   factory,
   context,
@@ -3123,11 +3130,14 @@ faust.createPolyDSPInstance = function (
 };
 
 faust.deletePolyDSPInstance = function (dsp) {};
+*/
 
 // Worklet mode
 
 // Template string
 
+// REMOVED: Fausts inbuilt version of polyphony is good, but not required for this library
+/*
 var mydspPolyProcessorString = `
 
     'use strict';
@@ -3929,9 +3939,12 @@ var mydspPolyProcessorString = `
     }
 
 `;
+*/
 
 // DSP poly
 
+// REMOVED: Fausts inbuilt version of polyphony is good, but not required for this library
+/*
 faust.createPolyDSPWorkletInstanceAux = function (
   factory,
   context,
@@ -4107,7 +4120,7 @@ faust.createPolyDSPWorkletInstanceAux = function (
    * @param channel - the MIDI channel (0..15, not used for now)
    * @param pitch - the MIDI pitch (0..127)
    * @param velocity - the MIDI velocity (0..127)
-   */
+   *
   audio_node.keyOn = function (channel, pitch, velocity) {
     this.port.postMessage({ type: "keyOn", data: [channel, pitch, velocity] });
   };
@@ -4118,14 +4131,14 @@ faust.createPolyDSPWorkletInstanceAux = function (
    * @param channel - the MIDI channel (0..15, not used for now)
    * @param pitch - the MIDI pitch (0..127)
    * @param velocity - the MIDI velocity (0..127)
-   */
+   *
   audio_node.keyOff = function (channel, pitch, velocity) {
     this.port.postMessage({ type: "keyOff", data: [channel, pitch, velocity] });
   };
 
   /**
    * Gently terminates all the active voices.
-   */
+   *
   audio_node.allNotesOff = function () {
     this.port.postMessage({ type: "ctrlChange", data: [0, 123, 0] });
   };
@@ -4147,6 +4160,7 @@ faust.createPolyDSPWorkletInstanceAux = function (
   // And use it
   callback(audio_node);
 };
+*/
 
 /**
  * Create a 'polyphonic' AudioWorklet Web Audio object from a factory
@@ -4156,6 +4170,9 @@ faust.createPolyDSPWorkletInstanceAux = function (
  * @param polyphony - the number of polyphonic voices
  * @param callback - a callback taking the created AudioWorklet as parameter, or null in case of error
  */
+
+// REMOVED: Fausts inbuilt version of polyphony is good, but not required for this library
+/*
 faust.createPolyDSPWorkletInstance = function (
   factory,
   context,
@@ -4246,8 +4263,8 @@ faust.createPolyDSPWorkletInstance = function (
     );
   }
 };
-
 faust.deletePolyDSPWorkletInstance = function (dsp) {};
+*/
 
 // ADDED: ESM export for faust
 export { faust };
