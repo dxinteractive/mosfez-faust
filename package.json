@@ -1,6 +1,6 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./dist/faust.js",
   "keywords": [
@@ -27,7 +27,7 @@
     "test": "yarn jest",
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
-    "prepare": "yarn build"
+    "prepare": "yarn build && cp dist/* ."
   },
   "devDependencies": {
     "@types/audiobuffer-to-wav": "^1.0.2",
