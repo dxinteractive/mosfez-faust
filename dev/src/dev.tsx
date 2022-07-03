@@ -42,7 +42,15 @@ function Main() {
 function List() {
   return (
     <>
-      <ListHeader>Faust sketches</ListHeader>
+      <ListHeader>
+        Faust sketches -{" "}
+        <a
+          className={classes.link}
+          href="https://github.com/dxinteractive/mosfez-faust"
+        >
+          github repo
+        </a>
+      </ListHeader>
       <ol className={classes.list}>
         {all.map((dsp) => {
           return (

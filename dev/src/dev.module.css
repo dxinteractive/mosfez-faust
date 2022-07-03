@@ -39,3 +39,8 @@
   margin-top: 2rem;
   border-top: 1px solid var(--colorBack3);
 }
+
+.link {
+  color: var(--colorText2);
+  font-size: 16px;
+}
