@@ -27,7 +27,8 @@
     "test": "yarn jest",
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
-    "prepare": "yarn build && cp dist/* ."
+    "prepare": "yarn build && cp dist/* .",
+    "postpublish": "rm -f convert* faust* touch-start*"
   },
   "devDependencies": {
     "@types/audiobuffer-to-wav": "^1.0.2",
