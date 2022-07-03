@@ -1,6 +1,6 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "keywords": [
     "faust",
