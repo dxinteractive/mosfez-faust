@@ -3,20 +3,6 @@
   "version": "0.0.3",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./dist/faust.js",
-  "exports": {
-    "./faust": {
-      "default": "./dist/faust.js",
-      "types": "./dist/faust.d.ts"
-    },
-    "./touch-start": {
-      "default": "./dist/touch-start.js",
-      "types": "./dist/touch-start.d.ts"
-    },
-    "./convert": {
-      "default": "./dist/convert.js",
-      "types": "./dist/convert.d.ts"
-    }
-  },
   "keywords": [
     "faust",
     "wasm",
