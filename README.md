@@ -21,9 +21,6 @@ These are significant barriers to entry for easy adoption and installation via `
 
 More things to do later:
 
-- compilation doesn't wait for faust to be ready, so you can sometimes beat it and it won't work
-- faust js files pollute the console with messages
-- faust js files are larger than the feature set I need, so I'll remove the unused. Then ruin all those size savings by bundling wasm in js via base64 encoding
 - make faust js throw relevant errors rather than return `null`
 - try to get helpful messages returned when DSP contains syntax errors
 
