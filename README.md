@@ -5,32 +5,27 @@
 Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the Web Assembly Faust compiler, wrapped up in a library that'll have:
 
 - full typescript compatibility
-- ESM exports
-- no external file dependencies (i.e. don't require users to add `<script>` tags or place files at specific URLs)
+- ESM exports, so no need to add `<script>` tags
 - have any async functions chain seamlessly off any prior initialisation steps, so if a required resource is not yet ready, the API function simply waits until it is ready
 
 **[See the development project deployed!](https://dxinteractive.github.io/mosfez-faust/)** (even though it's intended to be used locally)
 
 _It's early days so it's probably not finished and probably doesn't work or have fixed API or anything._
 
-**Note:** "opinionated" means this library has a much narrower set of concerns than the original Faust webaudio API it's using. This is mainly just for compilation on the web, playback using `AudioWorket` nodes, no in-built-polyphonic compilation, some compilation options are set and inaccessible via this API.
-
-This is half done. Things to do later:
-
-- not require libfaust-wasm files to be placed manually in your deployed project's directory.
-
-These are significant barriers to entry for easy adoption and installation via `npm` or `yarn`, so I'll be bundling all these resources up together so installation is as simple as `yarn add mosfez-faust`, importing is as simple as `import { compile } from "mosfez-faust/faust";`, and compilation is as simple as `const node = await compile(audioContext, dsp);`.
+**Note:** "opinionated" means this library has a much narrower set of concerns than the original Faust webaudio API it's using. This is mainly just for compilation on the web, playback using `AudioWorket` nodes, no in-built-polyphonic compilation. Some compilation options may be inaccessible via this API.
 
 More things to do later:
 
-- make faust js throw relevant errors rather than return `null`
 - try to get helpful messages returned when DSP contains syntax errors
+- maybe not require libfaust-wasm files to be placed manually in your deployed project's directory.
 
 ## Installation
 
 **Note:** this isn't ready yet, but it's the plan.
 
 `npm install mosfez-faust` or `yarn add mosfez-faust`
+
+Then you'll need to copy the files from `node_modules/mosfez-faust/public` and put it in your projects public-facing root directory that will be accessible once deployed. e.g. if you are using Vite, put them in your Vite project's `public` directory. This library will make a request for `libfaust-wasm.wasm` and `libfaust-wasm.data` when it starts up, and will not work if those files can't be found.
 
 ## Usage
 

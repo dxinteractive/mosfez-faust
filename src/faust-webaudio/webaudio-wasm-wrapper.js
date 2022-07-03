@@ -232,14 +232,8 @@ var readyPromise = new Promise((resolve) => {
   readyResolver.current = resolve;
 });
 
-var getPreloadedPackage = function (name, size) {
-  console.log("name", name);
-  return new ArrayBuffer();
-};
-
 var faust_module = FaustModule({
   onRuntimeInitialized: readyResolver.current,
-  // getPreloadedPackage,
 }); // Emscripten generated module
 
 faust_module.lengthBytesUTF8 = function (str) {
