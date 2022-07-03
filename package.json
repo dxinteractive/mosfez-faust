@@ -17,7 +17,13 @@
       "types": "./dist/convert.d.ts"
     }
   },
-  "repository": "git@github.com:dxinteractive/mosfez-faust.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dxinteractive/mosfez-faust.git"
+  },
+  "bugs": {
+    "url": "git@github.com:dxinteractive/mosfez-faust/issues"
+  },
   "author": "Damien Clarke <dxinteractive@gmail.com>",
   "license": "MIT",
   "engines": {
