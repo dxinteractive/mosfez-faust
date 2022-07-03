@@ -1,3 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { faust } from "./faust-webaudio/webaudio-wasm-wrapper";
+
 // this isn't complete
 export type FaustNode = AudioNode & {
   destroy: () => void;
@@ -29,11 +33,15 @@ export default class Faust {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const { faust } = window;
+    // const { faust } = window;
 
     const factory = await new Promise((resolve) =>
       faust.createDSPFactory(dsp, argv, resolve)
     );
+
+    if (!factory) {
+      throw new Error("factory failed");
+    }
 
     const node = await new Promise((resolve) =>
       faust.createDSPWorkletInstance(factory, audioContext, resolve)
