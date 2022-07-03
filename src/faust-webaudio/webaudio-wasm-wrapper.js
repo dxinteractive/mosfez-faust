@@ -223,7 +223,24 @@ Utf8.decode = function (strUtf) {
 
 ("use strict");
 
-var faust_module = FaustModule(); // Emscripten generated module
+// ADDED: FaustModule.ready promise
+// so things required after init can chain off this promise
+var readyResolver = {
+  current: undefined,
+};
+var readyPromise = new Promise((resolve) => {
+  readyResolver.current = resolve;
+});
+
+var getPreloadedPackage = function (name, size) {
+  console.log("name", name);
+  return new ArrayBuffer();
+};
+
+var faust_module = FaustModule({
+  onRuntimeInitialized: readyResolver.current,
+  // getPreloadedPackage,
+}); // Emscripten generated module
 
 faust_module.lengthBytesUTF8 = function (str) {
   var len = 0;
@@ -516,13 +533,13 @@ faust.createDSPFactoryAux = function (code, argv, internal_memory, callback) {
  */
 faust.createDSPFactory = function (code, argv, callback) {
   // ADDED: make factory creation wait for faustmodule to be ready
-  faust_module.ready.then(() => {
+  readyPromise.then(() => {
     faust.createDSPFactoryAux(code, argv, true, callback);
   });
 };
 
-// ADDED: expose faust_module.ready promise
-faust.ready = faust_module.ready;
+// ADDED: expose readyPromise promise
+faust.ready = readyPromise;
 
 /**
  * Create a DSP factory from source code as a string to be used to create 'polyphonic' DSP

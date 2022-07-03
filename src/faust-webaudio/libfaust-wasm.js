@@ -10703,19 +10703,6 @@ var FaustModule = (function () {
     }
     noExitRuntime = true;
     run();
-
-    // ADDED: FaustModule.ready promise
-    // so things required after init can chain off this promise
-    // and remove the sensitive timing requirement that onRuntimeInitialized imposes
-    // whereby a callback must be registered before onRuntimeInitialized is called
-    var readyResolver = {
-      current: undefined,
-    };
-    FaustModule.ready = new Promise((resolve) => {
-      readyResolver.current = resolve;
-    });
-    Module.onRuntimeInitialized = readyResolver.current;
-
     return FaustModule;
   };
 })();
