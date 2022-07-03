@@ -6,6 +6,13 @@ export const ready = faust.ready as Promise<undefined>;
 
 // this isn't complete
 export type FaustNode = AudioNode & {
+  init: () => void;
+  getJSON: () => string;
+  setParamValue: (path: string, val: number) => void; // TODO confirm if always number
+  getParamValue: (path: string) => number;
+  getNumInputs: () => number;
+  getNumOutputs: () => number;
+  getParams: () => unknown[]; // TODO fill this in
   destroy: () => void;
 };
 

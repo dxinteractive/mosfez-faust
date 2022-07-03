@@ -1903,10 +1903,11 @@ faust.createDSPWorkletInstanceAux = function (factory, context, callback) {
     return factory.getJSON();
   };
 
+  // REMOVED: WAP not needed
   // For WAP : TODO
-  audio_node.getMetadata = function () {
-    return factory.getJSON();
-  };
+  //   audio_node.getMetadata = function () {
+  //     return factory.getJSON();
+  //   };
 
   // Needed for sample accurate control
   audio_node.setParamValue = function (path, val) {
@@ -1916,13 +1917,14 @@ faust.createDSPWorkletInstanceAux = function (factory, context, callback) {
     return this.parameters.get(path).value;
   };
 
+  // REMOVED: WAP not needed
   // For WAP
-  audio_node.setParam = function (path, val) {
-    this.parameters.get(path).setValueAtTime(val, 0);
-  };
-  audio_node.getParam = function (path) {
-    return this.parameters.get(path).value;
-  };
+  //   audio_node.setParam = function (path, val) {
+  //     this.parameters.get(path).setValueAtTime(val, 0);
+  //   };
+  //   audio_node.getParam = function (path) {
+  //     return this.parameters.get(path).value;
+  //   };
 
   audio_node.setOutputParamHandler = function (handler) {
     this.output_handler = handler;
