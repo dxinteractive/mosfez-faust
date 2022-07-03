@@ -1,14 +1,12 @@
 import { useEffect, useState, useRef } from "react";
 import type { DspDefinition, DspDefinitionOffline } from "./types";
 
-import { Faust } from "mosfez-faust/faust";
+import { compile } from "mosfez-faust/faust";
 import {
   arrayToFloat32Array,
   arrayToAudioBuffer,
   audioBufferToFloat32Array,
 } from "mosfez-faust/convert";
-
-const faust = new Faust();
 
 export type Output = {
   name: string;
@@ -65,7 +63,7 @@ export async function faustOfflineRender(
         sampleRate
       );
 
-      const node = await faust.compileNode(offlineContext, dspToCompile);
+      const node = await compile(offlineContext, dspToCompile);
 
       if (input.length === 0) {
         node.connect(offlineContext.destination);

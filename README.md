@@ -17,7 +17,7 @@ This is half done. Things to do later:
 
 - not require libfaust-wasm files to be placed manually in your deployed project's directory.
 
-These are significant barriers to entry for easy adoption and installation via `npm` or `yarn`, so I'll be bundling all these resources up together so installation is as simple as `yarn add mosfez-faust` and usage is as simple as `import { Faust } from "mosfez-faust/faust";`.
+These are significant barriers to entry for easy adoption and installation via `npm` or `yarn`, so I'll be bundling all these resources up together so installation is as simple as `yarn add mosfez-faust` and usage is as simple as `import { compile } from "mosfez-faust/faust"; const node = await compile(audioContext, dsp);`.
 
 More things to do later:
 

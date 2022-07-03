@@ -521,6 +521,9 @@ faust.createDSPFactory = function (code, argv, callback) {
   });
 };
 
+// ADDED: expose faust_module.ready promise
+faust.ready = faust_module.ready;
+
 /**
  * Create a DSP factory from source code as a string to be used to create 'polyphonic' DSP
  *
