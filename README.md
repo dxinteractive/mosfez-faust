@@ -4,7 +4,7 @@ Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a littl
 
 - full typescript compatibility
 - ESM exports
-- no external file dependencies (i.e. don't require users to add `<script>` tags)
+- no external file dependencies (i.e. don't require users to add `<script>` tags or place files at specific URLs)
 - have any async functions chain seamlessly off any prior initialisation steps, so if a required resource is not yet ready, the API function simply waits until it is ready
 
 **[See the development project deployed!](https://dxinteractive.github.io/mosfez-faust/)** (even though it's intended to be used locally)
@@ -17,7 +17,7 @@ This is half done. Things to do later:
 
 - not require libfaust-wasm files to be placed manually in your deployed project's directory.
 
-These are significant barriers to entry for easy adoption and installation via `npm` or `yarn`, so I'll be bundling all these resources up together so installation is as simple as `yarn add mosfez-faust` and usage is as simple as `import { compile } from "mosfez-faust/faust"; const node = await compile(audioContext, dsp);`.
+These are significant barriers to entry for easy adoption and installation via `npm` or `yarn`, so I'll be bundling all these resources up together so installation is as simple as `yarn add mosfez-faust`, importing is as simple as `import { compile } from "mosfez-faust/faust";`, and compilation is as simple as `const node = await compile(audioContext, dsp);`.
 
 More things to do later:
 
