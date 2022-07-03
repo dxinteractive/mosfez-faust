@@ -1,6 +1,6 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./dist/faust.js",
   "exports": {
@@ -17,7 +17,11 @@
       "types": "./dist/convert.d.ts"
     }
   },
-  "keywords": ["faust", "wasm", "grame"],
+  "keywords": [
+    "faust",
+    "wasm",
+    "grame"
+  ],
   "homepage": "https://github.com/dxinteractive/mosfez-faust",
   "repository": {
     "type": "git",
