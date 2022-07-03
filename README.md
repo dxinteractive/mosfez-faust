@@ -2,26 +2,17 @@
 
 [![npm](https://img.shields.io/npm/v/mosfez-faust.svg)](https://www.npmjs.com/package/mosfez-faust) ![Master build](https://github.com/dxinteractive/mosfez-faust/workflows/CI/badge.svg?branch=main)
 
-Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the Web Assembly Faust compiler, wrapped up in a library that'll have:
+Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the Web Assembly Faust compiler, wrapped up in a library that has:
 
 - full typescript compatibility
 - ESM exports, so no need to add `<script>` tags
 - have any async functions chain seamlessly off any prior initialisation steps, so if a required resource is not yet ready, the API function simply waits until it is ready
 
-**[See the development project deployed!](https://dxinteractive.github.io/mosfez-faust/)** (even though it's intended to be used locally)
-
-_It's early days so it's probably not finished and probably doesn't work or have fixed API or anything._
+[See the dev project](https://dxinteractive.github.io/mosfez-faust/) - but keep in mind it's intended to be used locally.
 
 **Note:** "opinionated" means this library has a much narrower set of concerns than the original Faust webaudio API it's using. This is mainly just for compilation on the web, playback using `AudioWorket` nodes, no in-built-polyphonic compilation. Some compilation options may be inaccessible via this API.
 
-More things to do later:
-
-- try to get helpful messages returned when DSP contains syntax errors
-- maybe not require libfaust-wasm files to be placed manually in your deployed project's directory.
-
 ## Installation
-
-**Note:** this isn't ready yet, but it's the plan.
 
 `npm install mosfez-faust` or `yarn add mosfez-faust`
 
