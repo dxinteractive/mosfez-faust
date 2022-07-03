@@ -1,6 +1,6 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./dist/faust.js",
   "keywords": [
@@ -49,7 +49,9 @@
   },
   "sideEffects": false,
   "files": [
-    "dist",
+    "convert*",
+    "faust*",
+    "touch-start*",
     "public"
   ],
   "dependencies": {
