@@ -1,5 +1,7 @@
 # mosfez-faust
 
+[![npm](https://img.shields.io/npm/v/mosfez-faust.svg)](https://www.npmjs.com/package/mosfez-faust) ![Master build](https://github.com/dxinteractive/mosfez-faust/workflows/CI/badge.svg?branch=master)
+
 Makes dynamic compilation of [Faust](https://faust.grame.fr/) on the web a little easier, and has a dev project to run values through dsp offline, and preview dsp live. It's an opinionated version of some parts of [Faust for webaudio](https://github.com/grame-cncm/faust/tree/master-dev/architecture/webaudio), mostly just the Web Assembly Faust compiler, wrapped up in a library that'll have:
 
 - full typescript compatibility
