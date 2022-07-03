@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
 import type { DspDefinition } from "./types";
 
-import Faust, { FaustNode } from "mosfez-faust/faust";
-import touchStart from "mosfez-faust/touch-start";
+import { Faust, FaustNode } from "mosfez-faust/faust";
+import { touchStart } from "mosfez-faust/touch-start";
 
 const audioContext = new window.AudioContext();
 touchStart(audioContext);

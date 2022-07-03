@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import type { DspDefinition, DspDefinitionOffline } from "./types";
 
-import Faust from "mosfez-faust/faust";
+import { Faust } from "mosfez-faust/faust";
 import {
   arrayToFloat32Array,
   arrayToAudioBuffer,

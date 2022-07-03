@@ -7,7 +7,7 @@ export type FaustNode = AudioNode & {
   destroy: () => void;
 };
 
-export default class Faust {
+export class Faust {
   // ready: Promise<ReadyResult>;
 
   constructor() {

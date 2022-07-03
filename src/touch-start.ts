@@ -1,4 +1,4 @@
-export default function (audioCtx: AudioContext) {
+export function touchStart(audioCtx: AudioContext) {
   if (audioCtx.state !== "suspended") return;
   const b = document.body;
   const events = ["touchstart", "touchend", "mousedown", "keydown"];
