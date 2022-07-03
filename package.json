@@ -17,12 +17,14 @@
       "types": "./dist/convert.d.ts"
     }
   },
+  "keywords": ["faust", "wasm", "grame"],
+  "homepage": "https://github.com/dxinteractive/mosfez-faust",
   "repository": {
     "type": "git",
     "url": "git@github.com:dxinteractive/mosfez-faust.git"
   },
   "bugs": {
-    "url": "git@github.com:dxinteractive/mosfez-faust/issues"
+    "url": "https://github.com/dxinteractive/mosfez-faust/issues"
   },
   "author": "Damien Clarke <dxinteractive@gmail.com>",
   "license": "MIT",
