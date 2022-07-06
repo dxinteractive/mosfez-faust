@@ -6,6 +6,7 @@ import classes from "./dev.module.css";
 import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
+import { Controls } from "./controls";
 
 import {
   HashRouter,
@@ -100,7 +101,7 @@ function Dsp(props: DspProps) {
   const { dspDefinition } = props;
   const { name, description, dsp } = dspDefinition;
 
-  useFaustLivePlayer(dspDefinition);
+  const liveResult = useFaustLivePlayer(dspDefinition);
   useFaustOfflineRenderer(dspDefinition);
 
   return (
@@ -111,6 +112,11 @@ function Dsp(props: DspProps) {
       <div className={classes.dspType}>
         type: {dspDefinition.type} - {TYPE_DESCS[dspDefinition.type]}
       </div>
+      {liveResult && liveResult.params.length > 0 && (
+        <div className={classes.dspContent}>
+          <Controls items={liveResult.ui} node={liveResult.node} />
+        </div>
+      )}
       <div className={classes.dspContent}>
         <pre className={classes.dspPre}>{dsp}</pre>
       </div>
