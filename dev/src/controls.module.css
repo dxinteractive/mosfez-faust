@@ -1,0 +1,24 @@
+.control {
+  padding-left: 1rem;
+  font-size: 16px;
+  margin-bottom: .5rem;
+  max-width: 30rem;
+}
+
+.value {
+  color: var(--colorText2);
+}
+
+.button {
+  margin-top: .5rem;
+}
+
+.inputContainer {
+  display: flex;
+}
+
+.inputRange {
+  margin-right: 1rem;
+  flex-grow: 2;
+  flex-shrink: .5;
+}

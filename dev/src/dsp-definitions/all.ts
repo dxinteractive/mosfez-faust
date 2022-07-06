@@ -5,6 +5,7 @@ import attenuator from "./attenuator";
 import blockMax from "./block-max";
 import liveTune from "./live-tune";
 import syntaxError from "./syntax-error";
+import pmSynth from "./pm-synth";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -12,4 +13,5 @@ export const all: DspDefinition[] = [
   blockMax,
   liveTune,
   syntaxError,
+  pmSynth,
 ];
