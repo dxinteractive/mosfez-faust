@@ -59,16 +59,21 @@ export function isUItemBarGraph(item: UIItem): item is UIItemBarGraph {
   return ["vbargraph", "hbargraph"].includes(item.type);
 }
 
+export type OutputParamHandler = (path: string, value: number) => void;
+
 export type FaustNode = AudioNode & {
+  // from webaudio-wasm-wrapper
   init: () => void;
   getJSON: () => string;
-  ui: UIItem[];
   setParamValue: (path: string, val: number) => void;
   getParamValue: (path: string) => number;
   getNumInputs: () => number;
   getNumOutputs: () => number;
   getParams: () => string[];
   destroy: () => void;
+  // added in compile()
+  ui: UIItem[];
+  getOutputValue: (path: string) => number;
 };
 
 export async function compile(
@@ -94,6 +99,18 @@ export async function compile(
   }
 
   node.ui = JSON.parse(node.getJSON()).ui;
+
+  const outputValues = new Map<string, number>();
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  node.setOutputParamHandler((path: string, value: number) => {
+    outputValues.set(path, value);
+  });
+
+  node.getOutputValue = (path: string): number => {
+    return outputValues.get(path) ?? 0;
+  };
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

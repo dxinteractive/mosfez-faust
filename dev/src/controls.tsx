@@ -2,13 +2,16 @@ import {
   isUItemGroup,
   isUItemNumber,
   isUItemBoolean,
+  isUItemBarGraph,
   UIItem,
 } from "mosfez-faust/faust";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import classes from "./controls.module.css";
 import type { FaustNode } from "mosfez-faust/faust";
+
+import { useAnimationFrame } from "./utils/use-animation-frame";
 
 export type ControlsProps = {
   items: UIItem[];
@@ -113,6 +116,35 @@ function Control(props: ControlProps) {
             <button {...buttonProps} className={classes.button}>
               {item.label}
             </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (isUItemBarGraph(item)) {
+    const [value, setValueState] = useState(0);
+
+    useAnimationFrame(() => {
+      const value = node.getOutputValue(item.address);
+      setValueState(value);
+    }, [node, item]);
+
+    return (
+      <div className={classes.control}>
+        <div>
+          {item.label} <span className={classes.value}>[{value}]</span>
+          <div className={classes.inputContainer}>
+            <input
+              className={classes.inputRange}
+              type="range"
+              value={value}
+              min={item.min}
+              max={item.max}
+              step={0.0001}
+              disabled
+            />
+            <input type="text" value={value} disabled />
           </div>
         </div>
       </div>
