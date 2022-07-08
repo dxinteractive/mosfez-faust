@@ -33,7 +33,6 @@ export async function faustOfflineRender(
     expect,
   } = dspDefinition;
 
-  // const inputFloat32 = input.map((arr) => new Float32Array(arr));
   const outputLengthFromInput = input[0]?.length ?? 0;
 
   const result = await Promise.all(
@@ -49,13 +48,6 @@ export async function faustOfflineRender(
           `process = ${name};`,
         ].join("\n");
       }
-
-      // const output = await faust.renderOffline(
-      //   dspToCompile,
-      //   sampleRate,
-      //   outputLength ?? outputLengthFromInput,
-      //   inputFloat32
-      // );
 
       const offlineContext = new OfflineAudioContext(
         channels,
