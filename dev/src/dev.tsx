@@ -7,7 +7,7 @@ import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
 import { Controls } from "./controls";
-import { Oscope, Spectro } from "./visualisations";
+import { Oscope } from "./visualisations";
 
 import {
   HashRouter,
