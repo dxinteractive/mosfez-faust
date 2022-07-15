@@ -41,6 +41,12 @@
   padding-top: 1rem;
 }
 
+.dspContent:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .link {
   color: var(--colorText2);
   font-size: 16px;

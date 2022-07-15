@@ -6,7 +6,7 @@ import {
   UIItem,
 } from "mosfez-faust/faust";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import classes from "./controls.module.css";
 import type { FaustNode } from "mosfez-faust/faust";
