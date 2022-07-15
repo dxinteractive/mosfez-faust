@@ -1,7 +1,8 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
+  "main": "./faust.js",
   "keywords": [
     "faust",
     "wasm",
@@ -27,7 +28,7 @@
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
     "prepare": "yarn build && cp dist/* .",
-    "postpublish": "rm -f convert.* faust.* touch-start.*"
+    "postpublish": "rm -f convert.* faust.* touch-start.* audio-source.*"
   },
   "devDependencies": {
     "@types/audiobuffer-to-wav": "^1.0.2",
@@ -52,6 +53,7 @@
     "convert.*",
     "faust.*",
     "touch-start.*",
+    "audio-source.*",
     "public"
   ],
   "dependencies": {

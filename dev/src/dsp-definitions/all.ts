@@ -7,6 +7,7 @@ import liveTune from "./live-tune";
 import syntaxError from "./syntax-error";
 import pmSynth from "./pm-synth";
 import paramLayers from "./param-layers";
+import passthroughMono from "./passthrough-mono";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -16,4 +17,5 @@ export const all: DspDefinition[] = [
   syntaxError,
   pmSynth,
   paramLayers,
+  passthroughMono,
 ];

@@ -7,6 +7,7 @@ import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
 import { Controls } from "./controls";
+import { Oscope, Spectro } from "./visualisations";
 
 import {
   HashRouter,
@@ -115,6 +116,46 @@ function Dsp(props: DspProps) {
       {liveResult && liveResult.params.length > 0 && (
         <div className={classes.dspContent}>
           <Controls items={liveResult.ui} node={liveResult.node} />
+        </div>
+      )}
+      {liveResult && liveResult.audioContext && (
+        <div className={classes.dspContent}>
+          {liveResult.source && (
+            <>
+              <Oscope
+                label="in"
+                source={liveResult.source}
+                audioContext={liveResult.audioContext}
+                width={200}
+                height={100}
+              />
+              <Oscope
+                source={liveResult.source}
+                audioContext={liveResult.audioContext}
+                width={200}
+                height={100}
+                spectro
+              />
+            </>
+          )}
+          {liveResult.node && (
+            <>
+              <Oscope
+                label="out"
+                source={liveResult.node}
+                audioContext={liveResult.audioContext}
+                width={200}
+                height={100}
+              />
+              <Oscope
+                source={liveResult.node}
+                audioContext={liveResult.audioContext}
+                width={200}
+                height={100}
+                spectro
+              />
+            </>
+          )}
         </div>
       )}
       <div className={classes.dspContent}>
