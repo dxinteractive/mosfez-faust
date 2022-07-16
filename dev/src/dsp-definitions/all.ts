@@ -8,6 +8,7 @@ import syntaxError from "./syntax-error";
 import pmSynth from "./pm-synth";
 import paramLayers from "./param-layers";
 import passthroughMono from "./passthrough-mono";
+import passthroughStereo from "./passthrough-stereo";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -18,4 +19,5 @@ export const all: DspDefinition[] = [
   pmSynth,
   paramLayers,
   passthroughMono,
+  passthroughStereo,
 ];

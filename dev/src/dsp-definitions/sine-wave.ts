@@ -11,7 +11,7 @@ const dspDefinition: DspDefinition = {
   description: "Makes a sine wave at 440Hz",
   dsp,
   type: "offline",
-  outputLength: 10,
+  outputLength: 1000,
   sampleRate: 44100,
   channels: 1,
 };

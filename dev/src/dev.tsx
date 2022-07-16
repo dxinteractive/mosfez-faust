@@ -7,7 +7,8 @@ import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { all } from "./dsp-definitions/all";
 import { Controls } from "./controls";
-import { Oscope } from "./visualisations";
+import { OscopePanel } from "./live-visualisations";
+import { PlotPanel } from "./offline-visualisations";
 
 import {
   HashRouter,
@@ -103,7 +104,7 @@ function Dsp(props: DspProps) {
   const { name, description, dsp } = dspDefinition;
 
   const liveResult = useFaustLivePlayer(dspDefinition);
-  useFaustOfflineRenderer(dspDefinition);
+  const offlineResult = useFaustOfflineRenderer(dspDefinition);
 
   return (
     <>
@@ -121,41 +122,29 @@ function Dsp(props: DspProps) {
       {liveResult && liveResult.audioContext && (
         <div className={classes.dspContent}>
           {liveResult.source && (
-            <>
-              <Oscope
-                label="in"
-                source={liveResult.source}
-                audioContext={liveResult.audioContext}
-                width={200}
-                height={100}
-              />
-              <Oscope
-                source={liveResult.source}
-                audioContext={liveResult.audioContext}
-                width={200}
-                height={100}
-                spectro
-              />
-            </>
+            <OscopePanel
+              label="in"
+              source={liveResult.source}
+              audioContext={liveResult.audioContext}
+            />
           )}
           {liveResult.node && (
-            <>
-              <Oscope
-                label="out"
-                source={liveResult.node}
-                audioContext={liveResult.audioContext}
-                width={200}
-                height={100}
-              />
-              <Oscope
-                source={liveResult.node}
-                audioContext={liveResult.audioContext}
-                width={200}
-                height={100}
-                spectro
-              />
-            </>
+            <OscopePanel
+              label="out"
+              source={liveResult.node}
+              audioContext={liveResult.audioContext}
+            />
           )}
+        </div>
+      )}
+      {offlineResult && (
+        <div className={classes.dspContent}>
+          <PlotPanel
+            offlineResult={offlineResult}
+            width={700}
+            height={200}
+            zoom={10}
+          />
         </div>
       )}
       <div className={classes.dspContent}>
