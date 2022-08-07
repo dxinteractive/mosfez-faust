@@ -1,17 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAnimationFrame } from "./utils/use-animation-frame";
 import classes from "./live-visualisations.module.css";
 
 type OscopePanelProps = {
   source: AudioNode;
   audioContext: AudioContext;
-  spectro?: boolean;
   label?: string;
 };
 
+type OscopePanelViewType = "oscope" | "spectro" | "off";
+
+const OSCOPE_PANEL_VIEW_TYPES: OscopePanelViewType[] = [
+  "oscope",
+  "spectro",
+  "off",
+];
+
 export function OscopePanel(props: OscopePanelProps) {
-  const { source, audioContext, spectro, label } = props;
+  const { source, audioContext, label } = props;
   const { channelCount } = source;
+
+  const [viewIndex, setViewIndex] = useState(0);
+  const viewType = OSCOPE_PANEL_VIEW_TYPES[viewIndex];
+  const nextView = () => setViewIndex((s) => (s + 1) % 3);
 
   const scopes: React.ReactElement[] = [];
   for (let i = 0; i < channelCount; i++) {
@@ -20,7 +31,7 @@ export function OscopePanel(props: OscopePanelProps) {
         key={i}
         source={source}
         audioContext={audioContext}
-        spectro={spectro}
+        spectro={viewType === "spectro"}
         width={200}
         height={100}
       />
@@ -28,9 +39,13 @@ export function OscopePanel(props: OscopePanelProps) {
   }
 
   return (
-    <div className={classes.oscopePanel}>
+    <div className={classes.oscopePanel} onClick={nextView}>
       <div>{label}</div>
-      {scopes}
+      {viewType === "off" ? (
+        <div style={{ height: 100 }} className={classes.oscope} />
+      ) : (
+        scopes
+      )}
     </div>
   );
 }
