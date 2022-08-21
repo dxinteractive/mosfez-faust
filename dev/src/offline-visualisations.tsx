@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import classes from "./offline-visualisations.module.css";
+import { downloadWav } from "mosfez-faust/convert";
 
 export type Output = {
   name: string;
@@ -7,6 +8,7 @@ export type Output = {
 };
 
 type PlotPanelProps = {
+  name: string;
   offlineResult: Output[];
   width: number;
   height: number;
@@ -14,7 +16,7 @@ type PlotPanelProps = {
 };
 
 export function PlotPanel(props: PlotPanelProps) {
-  const { offlineResult, width, height, zoom } = props;
+  const { name, offlineResult, width, height, zoom } = props;
 
   const [highlight, setHighlight] = useState(-1);
 
@@ -26,10 +28,28 @@ export function PlotPanel(props: PlotPanelProps) {
           highlightValue = <span>: {output.output[0][highlight]}</span>;
         }
 
+        const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.preventDefault();
+          const nameCleaned = name.replace(/ /g, "-").toLowerCase();
+          const filename = `${nameCleaned}-${output.name}`;
+          downloadWav(output.output, filename);
+        };
+
         return (
           <div className={classes.plot} key={i}>
-            <div>
-              {output.name} {highlightValue}
+            <div className={classes.plotHeader}>
+              <div className={classes.plotHeaderLeft}>
+                {output.name} {highlightValue}
+              </div>
+              <div className={classes.plotHeaderRight}>
+                <a
+                  href="#"
+                  className={classes.plotHeaderLink}
+                  onClick={handleDownload}
+                >
+                  download
+                </a>
+              </div>
             </div>
             <Plot
               output={output}

@@ -142,6 +142,7 @@ function Dsp(props: DspProps) {
       {offlineResult && (
         <div className={classes.dspContent}>
           <PlotPanel
+            name={name}
             offlineResult={offlineResult}
             width={width - 20}
             height={200}

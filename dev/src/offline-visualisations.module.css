@@ -2,3 +2,20 @@
   padding-top: .5rem;
   padding-bottom: .5rem;
 }
+
+.plotHeader {
+  display: flex;
+}
+
+.plotHeaderLeft {
+  flex-grow: 1;
+}
+
+.plotHeaderRight {
+  padding-left: 1rem;
+}
+
+.plotHeaderLink {
+  color: var(--colorText2);
+  font-size: 16px;
+}
