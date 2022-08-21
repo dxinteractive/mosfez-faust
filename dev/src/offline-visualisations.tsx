@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import classes from "./offline-visualisations.module.css";
-import { downloadWav } from "mosfez-faust/convert";
+import { downloadWav, arrayToAudioBuffer } from "mosfez-faust/convert";
 
 export type Output = {
   name: string;
@@ -13,10 +13,11 @@ type PlotPanelProps = {
   width: number;
   height: number;
   zoom: number;
+  liveAudioContext: AudioContext;
 };
 
 export function PlotPanel(props: PlotPanelProps) {
-  const { name, offlineResult, width, height, zoom } = props;
+  const { name, offlineResult, width, height, zoom, liveAudioContext } = props;
 
   const [highlight, setHighlight] = useState(-1);
 
@@ -27,6 +28,14 @@ export function PlotPanel(props: PlotPanelProps) {
         if (highlight !== -1) {
           highlightValue = <span>: {output.output[0][highlight]}</span>;
         }
+
+        const handlePlay = (e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.preventDefault();
+          const source = liveAudioContext.createBufferSource();
+          source.buffer = arrayToAudioBuffer(liveAudioContext, output.output);
+          source.connect(liveAudioContext.destination);
+          source.start();
+        };
 
         const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>) => {
           e.preventDefault();
@@ -40,6 +49,15 @@ export function PlotPanel(props: PlotPanelProps) {
             <div className={classes.plotHeader}>
               <div className={classes.plotHeaderLeft}>
                 {output.name} {highlightValue}
+              </div>
+              <div className={classes.plotHeaderRight}>
+                <a
+                  href="#"
+                  className={classes.plotHeaderLink}
+                  onClick={handlePlay}
+                >
+                  play
+                </a>
               </div>
               <div className={classes.plotHeaderRight}>
                 <a
