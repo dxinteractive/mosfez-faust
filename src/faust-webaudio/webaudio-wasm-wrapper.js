@@ -2086,40 +2086,43 @@ faust.createDSPWorkletInstanceAux = function (factory, context, callback) {
  * @param callback - a callback taking the created AudioWorklet as parameter, or null in case of error
  */
 faust.createDSPWorkletInstance = function (factory, context, callback) {
-  if (factory.polyphony.length === 0) {
-    var re1 = /mydsp/g;
-    var re2 = /GETJSON/g;
-    var re3 = /GETBASE64CODE/g;
-    var mydspProcessorString1 = mydspProcessorString.replace(re1, factory.name);
-    var mydspProcessorString2 = mydspProcessorString1.replace(
-      re2,
-      factory.getJSON()
-    );
-    var mydspProcessorString3 = mydspProcessorString2.replace(
-      re3,
-      factory.getBase64Code()
-    );
-    var url = window.URL.createObjectURL(
-      new Blob([mydspProcessorString3], { type: "text/javascript" })
-    );
+  // REMOVED: never use in built polyphony
+  // if (factory.polyphony.length === 0) {
+  var re1 = /mydsp/g;
+  var re2 = /GETJSON/g;
+  var re3 = /GETBASE64CODE/g;
+  var mydspProcessorString1 = mydspProcessorString.replace(re1, factory.name);
+  var mydspProcessorString2 = mydspProcessorString1.replace(
+    re2,
+    factory.getJSON()
+  );
+  var mydspProcessorString3 = mydspProcessorString2.replace(
+    re3,
+    factory.getBase64Code()
+  );
+  var url = window.URL.createObjectURL(
+    new Blob([mydspProcessorString3], { type: "text/javascript" })
+  );
 
-    context.audioWorklet
-      .addModule(url)
-      .then(function () {
-        // Processor has been registered
-        factory.polyphony.push(1);
-        // Create audio node
-        faust.createDSPWorkletInstanceAux(factory, context, callback);
-      })
-      .catch(function (error) {
-        // console.log(error);
-        // console.log("Faust mydsp cannot be loaded or compiled");
-        alert(error);
-      });
-  } else {
-    // Create audio node
-    faust.createDSPWorkletInstanceAux(factory, context, callback);
-  }
+  context.audioWorklet
+    .addModule(url)
+    .then(function () {
+      // Processor has been registered
+
+      // REMOVED: never use in built polyphony
+      // factory.polyphony.push(1);
+      // Create audio node
+      faust.createDSPWorkletInstanceAux(factory, context, callback);
+    })
+    .catch(function (error) {
+      // console.log(error);
+      // console.log("Faust mydsp cannot be loaded or compiled");
+      alert(error);
+    });
+  // } else {
+  //   // Create audio node
+  //   faust.createDSPWorkletInstanceAux(factory, context, callback);
+  // }
 };
 
 faust.deleteDSPWorkletInstance = function (dsp) {};
