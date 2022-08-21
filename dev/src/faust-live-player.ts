@@ -3,11 +3,7 @@ import type { DspDefinition } from "./types";
 
 import { compile, FaustNode } from "mosfez-faust/faust";
 import type { UIItem } from "mosfez-faust/faust";
-import { touchStart } from "mosfez-faust/touch-start";
 import { audioSource } from "mosfez-faust/audio-source";
-
-const audioContext = new window.AudioContext();
-touchStart(audioContext);
 
 export type UseFaustLivePlayerResult = {
   ui: UIItem[];
@@ -18,6 +14,7 @@ export type UseFaustLivePlayerResult = {
 };
 
 export function useFaustLivePlayer(
+  audioContext: AudioContext,
   dspDefinition: DspDefinition
 ): UseFaustLivePlayerResult | undefined {
   const effectCountRef = useRef(0);

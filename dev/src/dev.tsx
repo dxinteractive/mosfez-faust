@@ -21,6 +21,10 @@ import {
 } from "react-router-dom";
 import { DspDefinition } from "./types";
 
+import { touchStart } from "mosfez-faust/touch-start";
+const liveAudioContext = new window.AudioContext();
+touchStart(liveAudioContext);
+
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -104,7 +108,7 @@ function Dsp(props: DspProps) {
   const { dspDefinition } = props;
   const { name, description, dsp } = dspDefinition;
 
-  const liveResult = useFaustLivePlayer(dspDefinition);
+  const liveResult = useFaustLivePlayer(liveAudioContext, dspDefinition);
   const offlineResult = useFaustOfflineRenderer(dspDefinition);
   const { width } = useWindowSize();
 
@@ -147,6 +151,7 @@ function Dsp(props: DspProps) {
             width={width - 20}
             height={200}
             zoom={10}
+            liveAudioContext={liveAudioContext}
           />
         </div>
       )}
