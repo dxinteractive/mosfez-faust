@@ -45,3 +45,27 @@ export function audioBufferToArray(audioBuffer: AudioBuffer): number[][] {
 export function wavToBlob(wav: ArrayBuffer): Blob {
   return new Blob([new DataView(wav)], { type: "audio/wav" });
 }
+
+export function downloadBlob(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  document.body.appendChild(anchor);
+  anchor.href = url;
+  anchor.download = name;
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+export function downloadWav(
+  input: Float32Array[] | number[][] | AudioBuffer,
+  name: string
+) {
+  const context = new AudioContext();
+  const audioBuffer = Array.isArray(input)
+    ? arrayToAudioBuffer(context, input)
+    : input;
+  const wav = audioBufferToWav(audioBuffer);
+  const blob = wavToBlob(wav);
+  downloadBlob(blob, `${name}.wav`);
+}

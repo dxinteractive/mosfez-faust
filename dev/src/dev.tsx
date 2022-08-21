@@ -9,6 +9,7 @@ import { all } from "./dsp-definitions/all";
 import { Controls } from "./controls";
 import { OscopePanel } from "./live-visualisations";
 import { PlotPanel } from "./offline-visualisations";
+import { useWindowSize } from "./use-window-size";
 
 import {
   HashRouter,
@@ -105,6 +106,7 @@ function Dsp(props: DspProps) {
 
   const liveResult = useFaustLivePlayer(dspDefinition);
   const offlineResult = useFaustOfflineRenderer(dspDefinition);
+  const { width } = useWindowSize();
 
   return (
     <>
@@ -140,8 +142,9 @@ function Dsp(props: DspProps) {
       {offlineResult && (
         <div className={classes.dspContent}>
           <PlotPanel
+            name={name}
             offlineResult={offlineResult}
-            width={700}
+            width={width - 20}
             height={200}
             zoom={10}
           />

@@ -1786,7 +1786,9 @@ var mydspProcessorString = `
         mydspProcessor.wasm_module = new WebAssembly.Module(mydspProcessor.atob(getBase64Codemydsp()));
         registerProcessor('mydsp', mydspProcessor);
     } catch (e) {
-        console.log(e); console.log("Faust mydsp cannot be loaded or compiled");
+        // REMOVED: console log noise that doesnt affect output
+        // I assume if it were serious this error would not be caught and not rethrown
+        // console.log(e); console.log("Faust mydsp cannot be loaded or compiled");
     }
 `;
 
