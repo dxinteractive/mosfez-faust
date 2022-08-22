@@ -78,6 +78,8 @@ export async function faustOfflineRender(
         passed = JSON.stringify(output) === JSON.stringify(expected);
       }
 
+      node.destroy();
+
       return {
         name,
         output,

@@ -76,16 +76,27 @@ export type FaustNode = AudioNode & {
   getOutputValue: (path: string) => number;
 };
 
+// create a cache to remember preivously built factories
+// because the one built into the faust web audio wrapper
+// doesn't make a cache entry until async compilation is done
+// so if you fire off many compilation requests, it'll make many duplicate factories
+const factoryCache = new Map<string, Promise<unknown>>();
+
 export async function compile(
   audioContext: AudioContext | OfflineAudioContext,
   dsp: string
 ): Promise<FaustNode> {
   const argv = ["-ftz", "2", "-I", "http://127.0.0.1:8000/../../libraries/"];
 
-  const factory = await new Promise((resolve) =>
-    faust.createDSPFactory(dsp, argv, resolve)
-  );
+  let factoryPromise = factoryCache.get(dsp);
+  if (!factoryPromise) {
+    factoryPromise = new Promise((resolve) =>
+      faust.createDSPFactory(dsp, argv, resolve)
+    );
+    factoryCache.set(dsp, factoryPromise);
+  }
 
+  const factory = await factoryPromise;
   if (!factory) {
     throw new Error(faust.error_msg);
   }
