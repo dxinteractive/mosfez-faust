@@ -4,6 +4,8 @@ import { faust } from "./faust-webaudio/webaudio-wasm-wrapper";
 
 export const ready = faust.ready as Promise<undefined>;
 
+export const internalFaustWrapper = faust;
+
 export type UIItemGroup = {
   type: "hgroup" | "vgroup" | "tgroup";
   items: UIItem[];
