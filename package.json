@@ -1,6 +1,6 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./faust.js",
   "keywords": [
