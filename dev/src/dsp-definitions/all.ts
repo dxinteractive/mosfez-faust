@@ -9,6 +9,7 @@ import pmSynth from "./pm-synth";
 import paramLayers from "./param-layers";
 import passthroughMono from "./passthrough-mono";
 import passthroughStereo from "./passthrough-stereo";
+import recordLineIn from "./record-line-in";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -20,4 +21,5 @@ export const all: DspDefinition[] = [
   paramLayers,
   passthroughMono,
   passthroughStereo,
+  recordLineIn,
 ];

@@ -5,6 +5,7 @@ import classes from "./dev.module.css";
 
 import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
+import { useDspCallback } from "./dsp-callback";
 import { all } from "./dsp-definitions/all";
 import { Controls } from "./controls";
 import { OscopePanel } from "./live-visualisations";
@@ -98,6 +99,8 @@ function DspRoute() {
 const TYPE_DESCS = {
   offline: "open your browser console to see DSP output",
   live: "DSP will play sound once successfully compiled",
+  component: "",
+  callback: "",
 };
 
 type DspProps = {
@@ -106,11 +109,20 @@ type DspProps = {
 
 function Dsp(props: DspProps) {
   const { dspDefinition } = props;
-  const { name, description, dsp } = dspDefinition;
+  const { name, description } = dspDefinition;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const dsp = dspDefinition.dsp;
 
   const liveResult = useFaustLivePlayer(liveAudioContext, dspDefinition);
   const offlineResult = useFaustOfflineRenderer(dspDefinition);
+  useDspCallback(dspDefinition, liveAudioContext);
   const { width } = useWindowSize();
+
+  let desc = TYPE_DESCS[dspDefinition.type];
+  if (desc) {
+    desc = ` - ${desc}`;
+  }
 
   return (
     <>
@@ -118,7 +130,8 @@ function Dsp(props: DspProps) {
         <strong>{name}</strong> - {description}
       </DspHeader>
       <div className={classes.dspType}>
-        type: {dspDefinition.type} - {TYPE_DESCS[dspDefinition.type]}
+        type: {dspDefinition.type}
+        {desc}
       </div>
       {liveResult && liveResult.params.length > 0 && (
         <div className={classes.dspContent}>
@@ -156,7 +169,7 @@ function Dsp(props: DspProps) {
         </div>
       )}
       <div className={classes.dspContent}>
-        <pre className={classes.dspPre}>{dsp}</pre>
+        {dsp && <pre className={classes.dspPre}>{dsp}</pre>}
       </div>
     </>
   );

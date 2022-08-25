@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { DspDefinition } from "./types";
+import { DspDefinition, isDspLive } from "./types";
 
 import { compile, FaustNode } from "mosfez-faust/faust";
 import type { UIItem } from "mosfez-faust/faust";
@@ -22,7 +22,7 @@ export function useFaustLivePlayer(
   const [result, setResult] = useState<UseFaustLivePlayerResult | undefined>();
 
   useEffect(() => {
-    if (dspDefinition.type !== "live") return;
+    if (!isDspLive(dspDefinition)) return;
     const count = ++effectCountRef.current;
 
     compile(audioContext, dspDefinition.dsp).then(async (node) => {
