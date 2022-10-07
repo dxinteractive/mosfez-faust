@@ -105,3 +105,6 @@ dist
 
 # MacOS artifacts
 .DS_Store
+
+# Large files
+dev/public/audio
