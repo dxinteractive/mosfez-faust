@@ -1,6 +1,6 @@
 {
   "name": "mosfez-faust",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Makes dynamic compilation of Faust on the web a little easier.",
   "main": "./faust.js",
   "keywords": [
@@ -27,8 +27,8 @@
     "test": "yarn jest",
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
-    "prepare": "yarn build && cp dist/* .",
-    "postpublish": "rm -f convert.* faust.* touch-start.* audio-source.*"
+    "prepare": "yarn build && rsync -vt dist/* .",
+    "postpublish": "rm -rf convert.* faust.* touch-start.* audio-source.* run-in-iframe.*"
   },
   "devDependencies": {
     "@types/audiobuffer-to-wav": "^1.0.2",
@@ -44,6 +44,7 @@
     "rollup": "^2.75.3",
     "rollup-plugin-dts": "^4.2.2",
     "rollup-plugin-esbuild": "^4.9.1",
+    "rollup-plugin-string": "^3.0.0",
     "ts-jest": "^28.0.3",
     "ts-node": "^10.8.0",
     "typescript": "^4.7.2"
@@ -54,6 +55,7 @@
     "faust.*",
     "touch-start.*",
     "audio-source.*",
+    "run-in-iframe.*",
     "public"
   ],
   "dependencies": {

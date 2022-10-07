@@ -1,9 +1,17 @@
 import dts from "rollup-plugin-dts";
 import esbuild from "rollup-plugin-esbuild";
+import { string } from "rollup-plugin-string";
 
-const entrypoints = ["faust", "touch-start", "convert", "audio-source"];
+const tsToJsEntrypoints = [
+  "faust",
+  "touch-start",
+  "convert",
+  "audio-source",
+  "iframe/run-in-iframe-inner.stringify",
+  "run-in-iframe",
+];
 
-export default entrypoints.flatMap((name) => {
+export default tsToJsEntrypoints.flatMap((name) => {
   const common = {
     input: `src/${name}.ts`,
     external: (id) => !/^[./]/.test(id),
@@ -11,7 +19,12 @@ export default entrypoints.flatMap((name) => {
 
   return [
     {
-      plugins: [esbuild()],
+      plugins: [
+        esbuild(),
+        string({
+          include: `**/*.stringify.js`,
+        }),
+      ],
       output: [
         {
           file: `dist/${name}.js`,

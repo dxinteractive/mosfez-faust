@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import type { DspDefinition, DspDefinitionOffline } from "./types";
+import { DspDefinition, DspDefinitionOffline, isDspOffline } from "./types";
 
 import { compile } from "mosfez-faust/faust";
 import {
@@ -107,7 +107,7 @@ export function useFaustOfflineRenderer(
   const isStartedRef = useRef(false);
 
   useEffect(() => {
-    if (isStartedRef.current || dspDefinition.type !== "offline") return;
+    if (isStartedRef.current || !isDspOffline(dspDefinition)) return;
     isStartedRef.current = true;
 
     console.log("input:");
