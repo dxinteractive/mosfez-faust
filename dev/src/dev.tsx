@@ -163,7 +163,6 @@ function Dsp(props: DspProps) {
             offlineResult={offlineResult}
             width={width - 20}
             height={200}
-            zoom={10}
             liveAudioContext={liveAudioContext}
           />
         </div>

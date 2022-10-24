@@ -42,6 +42,15 @@ export function audioBufferToArray(audioBuffer: AudioBuffer): number[][] {
   return float32ArrayToArray(audioBufferToFloat32Array(audioBuffer));
 }
 
+export async function arrayBufferToAudioBuffer(
+  arrayBuffer: ArrayBuffer,
+  audioCtx: AudioContext | OfflineAudioContext
+): Promise<AudioBuffer> {
+  return await new Promise((resolve) =>
+    audioCtx.decodeAudioData(arrayBuffer, resolve)
+  );
+}
+
 export function wavToBlob(wav: ArrayBuffer): Blob {
   return new Blob([new DataView(wav)], { type: "audio/wav" });
 }

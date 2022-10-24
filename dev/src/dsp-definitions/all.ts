@@ -11,6 +11,7 @@ import passthroughMono from "./passthrough-mono";
 import passthroughStereo from "./passthrough-stereo";
 import recordLineIn from "./record-line-in";
 import iframeRenderTest from "./iframe-render-test";
+import sampleInput from "./sample-input";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -24,4 +25,5 @@ export const all: DspDefinition[] = [
   passthroughStereo,
   recordLineIn,
   iframeRenderTest,
+  sampleInput,
 ];
