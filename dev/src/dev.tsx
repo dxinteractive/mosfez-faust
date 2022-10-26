@@ -161,7 +161,7 @@ function Dsp(props: DspProps) {
           <PlotPanel
             name={name}
             offlineResult={offlineResult}
-            width={width - 20}
+            width={width - 36}
             height={200}
             liveAudioContext={liveAudioContext}
           />

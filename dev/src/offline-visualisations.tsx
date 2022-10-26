@@ -1,40 +1,15 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import classes from "./offline-visualisations.module.css";
 import { downloadWav, arrayToAudioBuffer } from "mosfez-faust/convert";
+import normalizeWheel from "normalize-wheel";
 
 // pan, zoom, highlight
 type PlotStateUpdater = (
   params: [number, number, number]
 ) => [number, number, number];
 
-const PAN_SPEED = 64;
-
-const doPan = (amount: number): PlotStateUpdater => {
-  return ([p, z, h]) => {
-    const np = Math.floor(p + Math.max(PAN_SPEED / z, 1) * amount);
-    return [np, z, h];
-  };
-};
-
-const doZoom = (amount: number): PlotStateUpdater => {
-  return ([p, z, h]) => {
-    // let np = p;
-    // if (h !== -1) {
-    // }
-    // TODO
-    return [p, z * amount, h];
-  };
-};
-
 const setHighlight = (amount: number): PlotStateUpdater => {
   return ([p, z]) => [p, z, amount];
-};
-
-const PAN_ZOOM_UPDATERS: Record<string, PlotStateUpdater> = {
-  ArrowLeft: doPan(-1),
-  ArrowRight: doPan(1),
-  ArrowUp: doZoom(0.5),
-  ArrowDown: doZoom(2),
 };
 
 export type Output = {
@@ -54,20 +29,6 @@ export function PlotPanel(props: PlotPanelProps) {
   const { name, offlineResult, width, height, liveAudioContext } = props;
 
   const [[pan, zoomWidth, highlight], setPlotState] = useState([0, 8, -1]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const updater = PAN_ZOOM_UPDATERS[e.key];
-      if (updater) {
-        setPlotState(updater);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
   return (
     <>
@@ -172,6 +133,8 @@ export function Plot(props: PlotProps) {
     props;
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const startDragPointerX = useRef<number | undefined>(undefined);
+  const startDragPan = useRef<number | undefined>(undefined);
 
   const handlePointerOut = () => {
     setPlotState(setHighlight(-1));
@@ -179,9 +142,47 @@ export function Plot(props: PlotProps) {
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const offsetLeft = canvasRef.current?.offsetLeft ?? 0;
-    const index = Math.floor((e.clientX - offsetLeft) / zoomWidth) + pan;
-    setPlotState(setHighlight(index));
+    const worldSpaceX = (e.clientX - offsetLeft) / zoomWidth;
+    const index = worldSpaceX + pan;
+    setPlotState(setHighlight(Math.floor(index)));
+
+    if (
+      startDragPointerX.current !== undefined &&
+      startDragPan.current !== undefined
+    ) {
+      const np =
+        startDragPan.current - (worldSpaceX - startDragPointerX.current);
+      setPlotState(([, z, h]) => [np, z, h]);
+    }
   };
+
+  const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    const offsetLeft = canvasRef.current?.offsetLeft ?? 0;
+    startDragPointerX.current = (e.clientX - offsetLeft) / zoomWidth;
+    startDragPan.current = pan;
+  };
+
+  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+    const { pixelY } = normalizeWheel(e);
+    const dir = pixelY < 0 ? 2 : 0.5;
+    setPlotState(([p, z, h]) => {
+      const offsetLeft = canvasRef.current?.offsetLeft ?? 0;
+      const pointerX = (e.clientX - offsetLeft) / zoomWidth;
+      const np = p + pointerX - (1 / dir) * pointerX;
+      return [np, z * dir, h];
+    });
+  };
+
+  useEffect(() => {
+    const handlePointerUp = () => {
+      startDragPointerX.current = undefined;
+      startDragPan.current = undefined;
+    };
+    window.addEventListener("pointerup", handlePointerUp);
+    return () => {
+      window.removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [zoomWidth]);
 
   const zoomHeight = useMemo(
     () => getZoomHeight(output.output),
@@ -196,7 +197,7 @@ export function Plot(props: PlotProps) {
       drawContext.clearRect(0, 0, width, height);
       const max = Math.min(width, output.output[0].length) / zoomWidth;
       for (let x = 0; x < max; x++) {
-        const index = x + pan;
+        const index = x + Math.floor(pan);
         const xvalue = output.output[0][index];
         const y = xvalue * zoomHeight * height * -0.48 + height * 0.5;
         const px = Math.floor(x * zoomWidth);
@@ -218,8 +219,10 @@ export function Plot(props: PlotProps) {
       width={width}
       height={height}
       ref={canvasRef}
+      onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerOut={handlePointerOut}
+      onWheel={handleWheel}
     />
   );
 }
