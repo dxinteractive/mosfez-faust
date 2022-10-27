@@ -6,7 +6,16 @@ import {
   arrayToFloat32Array,
   arrayToAudioBuffer,
   audioBufferToFloat32Array,
+  audioBufferToArray,
+  arrayBufferToAudioBuffer,
 } from "mosfez-faust/convert";
+
+function logChannels(
+  arr: Float32Array[] | number[][],
+  log: (msg: unknown) => void
+) {
+  arr.forEach((channel) => log(Array.from(channel)));
+}
 
 export type Output = {
   name: string;
@@ -28,12 +37,12 @@ export async function faustOfflineRender(
     sampleRate,
     channels,
     dsp,
-    input = [],
+    inputFile,
     output = ["process"],
     expect,
   } = dspDefinition;
 
-  const outputLengthFromInput = input[0]?.length ?? 0;
+  let { input = [] } = dspDefinition;
 
   const result = await Promise.all(
     output.map(async (name) => {
@@ -49,11 +58,30 @@ export async function faustOfflineRender(
         ].join("\n");
       }
 
+      const outputLengthFromInput = input[0]?.length ?? 0;
+
       const offlineContext = new OfflineAudioContext(
         channels,
         outputLength ?? outputLengthFromInput,
         sampleRate
       );
+
+      if (inputFile) {
+        const response = await fetch(inputFile);
+        if (!response.ok) {
+          throw new Error(`Could not load sound file "${input}"`);
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await arrayBufferToAudioBuffer(
+          arrayBuffer,
+          offlineContext
+        );
+
+        input = audioBufferToArray(audioBuffer);
+      }
+
+      console.log("input:");
+      logChannels(input ?? [], console.log);
 
       const node = await compile(offlineContext, dspToCompile);
 
@@ -93,13 +121,6 @@ export async function faustOfflineRender(
   return result;
 }
 
-function logChannels(
-  arr: Float32Array[] | number[][],
-  log: (msg: unknown) => void
-) {
-  arr.forEach((channel) => log(Array.from(channel)));
-}
-
 export function useFaustOfflineRenderer(
   dspDefinition: DspDefinition
 ): Output[] | undefined {
@@ -109,9 +130,6 @@ export function useFaustOfflineRenderer(
   useEffect(() => {
     if (isStartedRef.current || !isDspOffline(dspDefinition)) return;
     isStartedRef.current = true;
-
-    console.log("input:");
-    logChannels(dspDefinition.input ?? [], console.log);
 
     faustOfflineRender(dspDefinition).then((output) => {
       output.forEach((item) => {

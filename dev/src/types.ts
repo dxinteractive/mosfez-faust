@@ -17,6 +17,7 @@ export type DspDefinitionOffline = DspDefinitionCommon & {
   channels: number;
   sampleRate: number;
   input?: number[][];
+  inputFile?: string;
   output?: string[];
   outputLength?: number;
   expect?: Record<string, number[][]>;

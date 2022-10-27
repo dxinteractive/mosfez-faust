@@ -25,7 +25,7 @@ async function callback() {
 
 const dspDefinition: DspDefinition = {
   id: "iframe-render-test",
-  name: "iframe render test",
+  name: "Iframe render test",
   description: "Try to render data in an iframe",
   type: "callback",
   callback,
