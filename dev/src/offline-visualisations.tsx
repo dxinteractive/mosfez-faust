@@ -95,7 +95,7 @@ export function PlotPanel(props: PlotPanelProps) {
         );
       })}
       <span className={classes.plotHighlightMeta}>
-        range {pan} - {pan + Math.ceil(width / zoomWidth)}
+        range {Math.round(pan)} - {Math.round(pan + width / zoomWidth)}
       </span>
     </>
   );
