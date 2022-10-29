@@ -44,8 +44,32 @@ function Main() {
   return (
     <div className={classes.main}>
       <Outlet />
+      <div className={classes.footer}>
+        <FooterLink href="https://faustdoc.grame.fr/manual/syntax/">
+          Faust syntax
+        </FooterLink>
+        <FooterLink href="https://faustlibraries.grame.fr/">
+          Faust libraries
+        </FooterLink>
+        <FooterLink href="https://faustide.grame.fr/">Faust IDE</FooterLink>
+        <FooterLink href="https://www.rebeltech.org/patch-library/patches/my-patches/">
+          OWL patches
+        </FooterLink>
+        <FooterLink href="https://www.openwarelab.org/Tools/firmware.html">
+          OWL Firmware
+        </FooterLink>
+      </div>
     </div>
   );
+}
+
+type FooterLinkProps = {
+  children: React.ReactNode;
+  href: string;
+};
+
+function FooterLink(props: FooterLinkProps) {
+  return <a className={classes.link} target="_blank" {...props} />;
 }
 
 function List() {
