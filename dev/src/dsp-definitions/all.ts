@@ -1,18 +1,19 @@
 import type { DspDefinition } from "../types";
 
-import sineWave from "./sine-wave";
-import attenuator from "./attenuator";
-import blockMax from "./block-max";
-import liveTune from "./live-tune";
-import syntaxError from "./syntax-error";
-import pmSynth from "./pm-synth";
-import paramLayers from "./param-layers";
-import passthroughMono from "./passthrough-mono";
-import passthroughStereo from "./passthrough-stereo";
-import recordLineIn from "./record-line-in";
-import iframeRenderTest from "./iframe-render-test";
-import sampleInput from "./sample-input";
-import partialDetector from "./partial-detector";
+import sineWave from "./01-sine-wave";
+import attenuator from "./02-attenuator";
+import blockMax from "./03-block-max";
+import liveTune from "./04-live-tune";
+import syntaxError from "./05-syntax-error";
+import pmSynth from "./06-pm-synth";
+import paramLayers from "./07-param-layers";
+import passthroughMono from "./08-passthrough-mono";
+import passthroughStereo from "./09-passthrough-stereo";
+import recordLineIn from "./10-record-line-in";
+import iframeRenderTest from "./11-iframe-render-test";
+import sampleInput from "./12-sample-input-offline";
+import partialDetector from "./13-partial-detector";
+import pitchDown from "./14-pitch-down";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -28,4 +29,5 @@ export const all: DspDefinition[] = [
   iframeRenderTest,
   sampleInput,
   partialDetector,
+  pitchDown,
 ];

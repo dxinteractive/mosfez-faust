@@ -14,6 +14,16 @@
   padding-bottom: .25rem;
 }
 
+.footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--colorBack3);
+}
+
+.footer a {
+  padding-right: 1rem;
+}
+
 .dspHeader {
   display: flex;
 }

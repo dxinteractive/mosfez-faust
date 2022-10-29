@@ -8,7 +8,7 @@ process = input : louder,louder;
 `;
 
 const dspDefinition: DspDefinition = {
-  id: "sample-input",
+  id: "sample-input-offline",
   name: "Sample input",
   description: "Pipes a sample into an offline render",
   dsp,
