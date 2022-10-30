@@ -704,17 +704,20 @@ input = voice1 + voice2 + voice3;
 //
 
 tablesize = 100000;
+bypass_fade_time = 0.005;
 
 trigger = button("trigger");
 speed = hslider("speed",0.95,0.0,1.0,0.0001) : si.smoo;
 
 sweep_at_speed(period,run,speed) = period,run : %(int(*:max(1)))~+(speed);
 
-read_index = sweep_at_speed(tablesize, trigger, speed) <: attach(_, hbargraph("read", 0, tablesize)) : int;
+trigger_with_tail = en.asr(0,1.0,bypass_fade_time,trigger) <: attach(_, hbargraph("trigger out", 0, 1)) : _ > 0;
+read_index = sweep_at_speed(tablesize, trigger_with_tail, speed) <: attach(_, hbargraph("read", 0, tablesize));
 write_index = ba.sweep(tablesize, trigger) <: attach(_, hbargraph("write", 0, tablesize));
-table = it.frwtable(2,tablesize,0.0,write_index,_,read_index);
+table = _ <: it.frwtable(2,tablesize,0.0,write_index,_,read_index);
 
-process = input : table <: _,_;
+bypass_fade_time_samples = bypass_fade_time * ma.SR : int;
+process = input : ba.bypass_fade(bypass_fade_time_samples, trigger == 0, table) <: _,_;
 `,dspDefinition={id:"pitch-down",name:"Pitch down",description:"Captures live input and plays it back slightly slower on a trigger",dsp,type:"live"},all=[dspDefinition$d,dspDefinition$c,dspDefinition$b,dspDefinition$a,dspDefinition$9,dspDefinition$8,dspDefinition$7,dspDefinition$6,dspDefinition$5,dspDefinition$4,dspDefinition$3,dspDefinition$2,dspDefinition$1,dspDefinition],control="_control_sxngc_1",value="_value_sxngc_8",button="_button_sxngc_12",inputContainer="_inputContainer_sxngc_16",inputRange="_inputRange_sxngc_20";var classes$2={control,value,button,inputContainer,inputRange};const useAnimationFrame=(e,o)=>{const i=react.exports.useRef(0),s=react.exports.useRef(performance.now()),d=react.exports.useRef(performance.now()),g=()=>{const _=performance.now(),Z=(_-d.current)/1e3,$=(_-s.current)/1e3;e(Z,$),s.current=_,i.current=requestAnimationFrame(g)};react.exports.useEffect(()=>(i.current=requestAnimationFrame(g),()=>cancelAnimationFrame(i.current)),o)};var jsxRuntime={exports:{}},reactJsxRuntime_production_min={};/**
  * @license React
  * react-jsx-runtime.production.min.js
