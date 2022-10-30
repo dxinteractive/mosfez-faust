@@ -34,17 +34,20 @@ input = voice1 + voice2 + voice3;
 //
 
 tablesize = 100000;
+bypass_fade_time = 0.005;
 
 trigger = button("trigger");
 speed = hslider("speed",0.95,0.0,1.0,0.0001) : si.smoo;
 
 sweep_at_speed(period,run,speed) = period,run : %(int(*:max(1)))~+(speed);
 
-read_index = sweep_at_speed(tablesize, trigger, speed) <: attach(_, hbargraph("read", 0, tablesize)) : int;
+trigger_with_tail = en.asr(0,1.0,bypass_fade_time,trigger) <: attach(_, hbargraph("trigger out", 0, 1)) : _ > 0;
+read_index = sweep_at_speed(tablesize, trigger_with_tail, speed) <: attach(_, hbargraph("read", 0, tablesize));
 write_index = ba.sweep(tablesize, trigger) <: attach(_, hbargraph("write", 0, tablesize));
-table = it.frwtable(2,tablesize,0.0,write_index,_,read_index);
+table = _ <: it.frwtable(2,tablesize,0.0,write_index,_,read_index);
 
-process = input : table <: _,_;
+bypass_fade_time_samples = bypass_fade_time * ma.SR : int;
+process = input : ba.bypass_fade(bypass_fade_time_samples, trigger == 0, table) <: _,_;
 `;
 
 const dspDefinition: DspDefinition = {
