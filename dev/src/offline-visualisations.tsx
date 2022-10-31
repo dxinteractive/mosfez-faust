@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import classes from "./offline-visualisations.module.css";
-import { downloadWav, arrayToAudioBuffer } from "mosfez-faust/convert";
+import { downloadWav, toAudioBuffer } from "mosfez-faust/convert";
 import normalizeWheel from "normalize-wheel";
 
 // pan, zoom, highlight
@@ -42,10 +42,10 @@ export function PlotPanel(props: PlotPanelProps) {
           );
         }
 
-        const handlePlay = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        const handlePlay = async (e: React.MouseEvent<HTMLAnchorElement>) => {
           e.preventDefault();
           const source = liveAudioContext.createBufferSource();
-          source.buffer = arrayToAudioBuffer(liveAudioContext, output.output);
+          source.buffer = await toAudioBuffer(output.output, liveAudioContext);
           source.connect(liveAudioContext.destination);
           source.start();
         };

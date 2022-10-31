@@ -5,17 +5,12 @@ async function callback() {
   console.log("go");
   const result = await runInIframe({
     functionString: `
-    'use strict';
-
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-    async function run(params) {
-      return params.foo;
-    }
-
-    exports.run = run;
+    exports.run = async function run(params) {
+      const audioArray = [[params.foo,1,2,3,4,5,6,7,8,9,10]];
+      return [{audioArray}];
+    };
   `,
-    params: { foo: "12345!" },
+    params: { foo: 9 },
   });
   console.log("result", result);
 

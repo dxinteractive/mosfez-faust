@@ -1,14 +1,19 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import runInIframeInnerStringified from "../dist/iframe/run-in-iframe-inner.stringify.js";
 
 export type RunInIframeConfig = {
   functionString: string;
   params: unknown;
+  transferrables?: Transferable[];
 };
+
+export type RunInIframeInnerResult = [unknown] | [unknown, Transferable[]];
 
 export async function runInIframe(
   options: RunInIframeConfig
 ): Promise<unknown> {
-  const { functionString, params } = options;
+  const { functionString, params, transferrables = [] } = options;
   const iframe = document.createElement("iframe");
   iframe.style.display = "none";
   document.body.append(iframe);
@@ -35,6 +40,6 @@ export async function runInIframe(
     };
     window.addEventListener("message", messageListener);
 
-    contentWindow.postMessage(params, window.location.origin); // TODO transferrables
+    contentWindow.postMessage(params, window.location.origin, transferrables);
   });
 }

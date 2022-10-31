@@ -28,10 +28,9 @@
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
     "prepare": "yarn build && rsync -vt dist/* .",
-    "postpublish": "rm -rf convert.* faust.* touch-start.* audio-source.* run-in-iframe.*"
+    "postpublish": "rm -rf convert.* faust.* touch-start.* audio-source.* run-in-iframe.* offline-render.*"
   },
   "devDependencies": {
-    "@types/audiobuffer-to-wav": "^1.0.2",
     "@types/jest": "^27.5.1",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@typescript-eslint/parser": "^5.19.0",
@@ -41,7 +40,7 @@
     "eslint-plugin-react": "^7.29.4",
     "jest": "^28.1.0",
     "prettier": "2.6.2",
-    "rollup": "^2.75.3",
+    "rollup": "^2.78.0",
     "rollup-plugin-dts": "^4.2.2",
     "rollup-plugin-esbuild": "^4.9.1",
     "rollup-plugin-string": "^3.0.0",
@@ -56,9 +55,7 @@
     "touch-start.*",
     "audio-source.*",
     "run-in-iframe.*",
+    "offline-render.*",
     "public"
-  ],
-  "dependencies": {
-    "audiobuffer-to-wav": "^1.0.0"
-  }
+  ]
 }

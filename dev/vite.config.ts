@@ -11,6 +11,10 @@ export default defineConfig({
         __dirname,
         "../dist/run-in-iframe.mjs"
       ),
+      "mosfez-faust/offline-render": path.resolve(
+        __dirname,
+        "../dist/offline-render.mjs"
+      ),
       "mosfez-faust": path.resolve(__dirname, "../src"),
     },
   },
