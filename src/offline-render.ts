@@ -53,8 +53,4 @@ export async function offlineRender(
 
   const audioBuffer = await toAudioBuffer(result as ArrayBuffer);
   return toFloat32AudioArray(audioBuffer);
-
-  // const offlineContext = new OfflineAudioContext(channels, length ?? 0, sampleRate);
-  // //
-  // const renderedBuffer = await offlineContext.startRendering();
 }
