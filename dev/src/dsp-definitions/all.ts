@@ -14,6 +14,7 @@ import iframeRenderTest from "./11-iframe-render-test";
 import sampleInput from "./12-sample-input-offline";
 import partialDetector from "./13-partial-detector";
 import pitchDown from "./14-pitch-down";
+import offlineRenderTest from "./15-offline-render-test";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -30,4 +31,5 @@ export const all: DspDefinition[] = [
   sampleInput,
   partialDetector,
   pitchDown,
+  offlineRenderTest,
 ];

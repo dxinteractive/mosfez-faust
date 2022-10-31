@@ -3,11 +3,9 @@ import { DspDefinition, DspDefinitionOffline, isDspOffline } from "./types";
 
 import { compile } from "mosfez-faust/faust";
 import {
-  arrayToFloat32Array,
-  arrayToAudioBuffer,
-  audioBufferToFloat32Array,
-  audioBufferToArray,
-  arrayBufferToAudioBuffer,
+  toFloat32AudioArray,
+  toAudioBuffer,
+  toAudioArray,
 } from "mosfez-faust/convert";
 
 function logChannels(
@@ -72,12 +70,9 @@ export async function faustOfflineRender(
           throw new Error(`Could not load sound file "${input}"`);
         }
         const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await arrayBufferToAudioBuffer(
-          arrayBuffer,
-          offlineContext
-        );
+        const audioBuffer = await toAudioBuffer(arrayBuffer, offlineContext);
 
-        input = audioBufferToArray(audioBuffer);
+        input = toAudioArray(audioBuffer);
       }
 
       console.log("input:");
@@ -90,16 +85,16 @@ export async function faustOfflineRender(
       } else {
         const source: AudioBufferSourceNode =
           offlineContext.createBufferSource();
-        source.buffer = arrayToAudioBuffer(offlineContext, input);
+        source.buffer = await toAudioBuffer(input, offlineContext);
         source.connect(node);
         node.connect(offlineContext.destination);
         source.start();
       }
 
       const renderedBuffer = await offlineContext.startRendering();
-      const output = audioBufferToFloat32Array(renderedBuffer);
+      const output = toFloat32AudioArray(renderedBuffer);
 
-      const expected = expect ? arrayToFloat32Array(expect[name]) : undefined;
+      const expected = expect ? toFloat32AudioArray(expect[name]) : undefined;
 
       let passed = true;
       if (expect) {

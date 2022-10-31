@@ -1,15 +1,53 @@
-import audioBufferToWav from "audiobuffer-to-wav";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { audioBufferToWav } from "./audiobuffer-to-wav/audiobuffer-to-wav";
 
-export { audioBufferToWav };
+export type AudioArray = number[][];
+export type Float32AudioArray = Float32Array[];
+export type AudioData = AudioArray | Float32Array[] | AudioBuffer | ArrayBuffer;
 
-export function arrayToAudioBuffer(
-  ctx: AudioContext | OfflineAudioContext,
-  channels: Float32Array[] | number[][]
+//
+// type guards
+//
+
+function isObjectType(type: string, value: unknown): boolean {
+  return Object.prototype.toString.call(value) === `[object ${type}]`;
+}
+
+export function isAudioArray(value: unknown): value is AudioArray {
+  return Array.isArray(value) && value.length > 0 && Array.isArray(value[0]);
+}
+
+export function isFloat32AudioArray(
+  value: unknown
+): value is Float32AudioArray {
+  return (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    isObjectType("Float32Array", value[0])
+  );
+}
+
+export function isAudioBuffer(value: unknown): value is AudioBuffer {
+  return isObjectType("AudioBuffer", value);
+}
+
+export function isArrayBuffer(value: unknown): value is ArrayBuffer {
+  return isObjectType("ArrayBuffer", value);
+}
+
+//
+// 1:1 conversion functions
+//
+
+function audioArrayToAudioBuffer(
+  channels: Float32AudioArray | AudioArray,
+  audioCtx: AudioContext | OfflineAudioContext
 ): AudioBuffer {
-  const buffer = ctx.createBuffer(
+  const buffer = audioCtx.createBuffer(
     channels.length,
     channels[0].length,
-    ctx.sampleRate
+    audioCtx.sampleRate
   );
   for (let channel = 0; channel < buffer.numberOfChannels; channel++) {
     const nowBuffering = buffer.getChannelData(channel);
@@ -20,29 +58,27 @@ export function arrayToAudioBuffer(
   return buffer;
 }
 
-export function audioBufferToFloat32Array(
+function audioBufferToFloat32AudioArray(
   audioBuffer: AudioBuffer
-): Float32Array[] {
-  const channels: Float32Array[] = [];
+): Float32AudioArray {
+  const channels: Float32AudioArray = [];
   for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
     channels.push(audioBuffer.getChannelData(i));
   }
   return channels;
 }
 
-export function arrayToFloat32Array(arr: number[][]): Float32Array[] {
+function arrayToFloat32AudioArray(arr: AudioArray): Float32AudioArray {
   return arr.map((arr) => new Float32Array(arr));
 }
 
-export function float32ArrayToArray(arr: Float32Array[]): number[][] {
+function float32ArrayToAudioArray(
+  arr: Float32AudioArray | AudioArray
+): AudioArray {
   return arr.map((arr) => Array.from(arr));
 }
 
-export function audioBufferToArray(audioBuffer: AudioBuffer): number[][] {
-  return float32ArrayToArray(audioBufferToFloat32Array(audioBuffer));
-}
-
-export async function arrayBufferToAudioBuffer(
+async function arrayBufferToAudioBuffer(
   arrayBuffer: ArrayBuffer,
   audioCtx: AudioContext | OfflineAudioContext
 ): Promise<AudioBuffer> {
@@ -51,8 +87,83 @@ export async function arrayBufferToAudioBuffer(
   );
 }
 
-export function wavToBlob(wav: ArrayBuffer): Blob {
-  return new Blob([new DataView(wav)], { type: "audio/wav" });
+function arrayBufferToWavBlob(buffer: ArrayBuffer): Blob {
+  return new Blob([new DataView(buffer)], { type: "audio/wav" });
+}
+
+//
+// target based conversion functions
+//
+
+export function toAudioArray(
+  input: AudioArray | Float32AudioArray | AudioBuffer
+): AudioArray {
+  if (isAudioBuffer(input)) {
+    input = audioBufferToFloat32AudioArray(input);
+  }
+  if (isFloat32AudioArray(input)) {
+    return float32ArrayToAudioArray(input);
+  }
+  if (isAudioArray(input)) {
+    return input;
+  }
+  throw new Error(`toArray: unconvertible input type: ${input}`);
+}
+
+export function toFloat32AudioArray(
+  input: AudioArray | Float32AudioArray | AudioBuffer
+): Float32AudioArray {
+  if (isFloat32AudioArray(input)) {
+    return input;
+  }
+  if (isAudioArray(input)) {
+    return arrayToFloat32AudioArray(input);
+  }
+  if (isAudioBuffer(input)) {
+    return audioBufferToFloat32AudioArray(input);
+  }
+  throw new Error(`toFloat32AudioArray: unconvertible input type: ${input}`);
+}
+
+export async function toAudioBuffer(
+  input: AudioData,
+  audioCtx: AudioContext | OfflineAudioContext = new AudioContext()
+): Promise<AudioBuffer> {
+  if (isAudioBuffer(input)) {
+    return input;
+  }
+  if (isArrayBuffer(input)) {
+    return arrayBufferToAudioBuffer(input, audioCtx);
+  }
+  if (isAudioArray(input) || isFloat32AudioArray(input)) {
+    return audioArrayToAudioBuffer(input, audioCtx);
+  }
+  throw new Error(`toAudioBuffer: unconvertible input type: ${input}`);
+}
+
+export async function toArrayBuffer(
+  input: AudioData,
+  audioCtx: AudioContext | OfflineAudioContext = new AudioContext()
+): Promise<ArrayBuffer> {
+  if (isArrayBuffer(input)) {
+    return input;
+  }
+  const buffer = await toAudioBuffer(input, audioCtx);
+  return audioBufferToWav(buffer);
+}
+
+export async function toWavBlob(input: AudioData): Promise<Blob> {
+  const buffer = await toArrayBuffer(input);
+  return arrayBufferToWavBlob(buffer);
+}
+
+//
+// utils
+//
+
+export async function downloadWav(input: AudioData, name: string) {
+  const blob = await toWavBlob(input);
+  downloadBlob(blob, `${name}.wav`);
 }
 
 export function downloadBlob(blob: Blob, name: string) {
@@ -64,17 +175,4 @@ export function downloadBlob(blob: Blob, name: string) {
   anchor.click();
   anchor.remove();
   URL.revokeObjectURL(url);
-}
-
-export function downloadWav(
-  input: Float32Array[] | number[][] | AudioBuffer,
-  name: string
-) {
-  const context = new AudioContext();
-  const audioBuffer = Array.isArray(input)
-    ? arrayToAudioBuffer(context, input)
-    : input;
-  const wav = audioBufferToWav(audioBuffer);
-  const blob = wavToBlob(wav);
-  downloadBlob(blob, `${name}.wav`);
 }
