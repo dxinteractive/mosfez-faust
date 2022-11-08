@@ -17,12 +17,13 @@ export type OfflineRenderParams = {
   sampleRate: number;
   length?: number;
   input?: AudioArray | Float32AudioArray | AudioBuffer;
+  props?: Record<string, unknown>;
 };
 
 export async function offlineRender(
   params: OfflineRenderParams
 ): Promise<Float32AudioArray> {
-  const { functionString = "", channels, sampleRate, input } = params;
+  const { functionString = "", channels, sampleRate, input, props } = params;
   let { length } = params;
 
   let inputArrayBuffer: ArrayBuffer | undefined;
@@ -47,6 +48,7 @@ export async function offlineRender(
       sampleRate,
       inputArrayBuffer,
       length: length ?? 0,
+      props,
     },
     transferrables,
   });

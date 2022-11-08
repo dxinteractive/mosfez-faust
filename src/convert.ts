@@ -149,7 +149,7 @@ export async function toArrayBuffer(
     return input;
   }
   const buffer = await toAudioBuffer(input, audioCtx);
-  return audioBufferToWav(buffer);
+  return audioBufferToWav(buffer, { float32: true });
 }
 
 export async function toWavBlob(input: AudioData): Promise<Blob> {

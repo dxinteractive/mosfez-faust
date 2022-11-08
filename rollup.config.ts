@@ -9,8 +9,10 @@ const tsToJsEntrypoints = [
   "audio-source",
   "iframe/run-in-iframe-inner.stringify",
   "iframe/offline-render-inner.stringify",
+  "iframe/offline-render-dsp-inner.stringify",
   "run-in-iframe",
   "offline-render",
+  "offline-render-dsp",
 ];
 
 export default tsToJsEntrypoints.flatMap((name) => {
