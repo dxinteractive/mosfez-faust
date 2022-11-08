@@ -5,16 +5,18 @@ type OfflineRenderInnerParams = {
   sampleRate: number;
   length: number;
   inputArrayBuffer?: ArrayBuffer;
+  props?: Record<string, unknown>;
 };
 
 export function offlineRenderInner(
   callback: (
     offlineCtx: OfflineAudioContext,
-    source?: AudioBufferSourceNode
+    source?: AudioBufferSourceNode,
+    props?: Record<string, unknown>
   ) => Promise<unknown>
 ) {
   return async (params: OfflineRenderInnerParams) => {
-    const { channels, length, sampleRate, inputArrayBuffer } = params;
+    const { channels, length, sampleRate, inputArrayBuffer, props } = params;
 
     const offlineContext = new OfflineAudioContext(
       channels,
@@ -32,7 +34,7 @@ export function offlineRenderInner(
       throw new Error(`functionString must set exports.buildContext`);
     }
 
-    await callback(offlineContext, source);
+    await callback(offlineContext, source, props);
 
     source?.start();
     const audioBuffer = await offlineContext.startRendering();

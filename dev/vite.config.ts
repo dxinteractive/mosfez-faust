@@ -15,6 +15,10 @@ export default defineConfig({
         __dirname,
         "../dist/offline-render.mjs"
       ),
+      "mosfez-faust/offline-render-dsp": path.resolve(
+        __dirname,
+        "../dist/offline-render-dsp.mjs"
+      ),
       "mosfez-faust": path.resolve(__dirname, "../src"),
     },
   },

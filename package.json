@@ -28,7 +28,7 @@
     "lint": "yarn eslint src",
     "pretty": "yarn prettier --write .",
     "prepare": "yarn build && rsync -vt dist/* .",
-    "postpublish": "rm -rf convert.* faust.* touch-start.* audio-source.* run-in-iframe.* offline-render.*"
+    "postpublish": "rm -rf convert.* faust.* touch-start.* audio-source.* run-in-iframe.* offline-render.* offline-render-dsp.*"
   },
   "devDependencies": {
     "@types/jest": "^27.5.1",
@@ -56,6 +56,7 @@
     "audio-source.*",
     "run-in-iframe.*",
     "offline-render.*",
+    "offline-render-dsp.*",
     "public"
   ]
 }
