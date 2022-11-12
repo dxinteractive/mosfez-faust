@@ -30,7 +30,7 @@ export async function offlineRender(
   let transferrables: ArrayBuffer[] = [];
 
   if (input) {
-    inputArrayBuffer = await toArrayBuffer(input);
+    inputArrayBuffer = await toArrayBuffer(input, sampleRate);
     transferrables = [inputArrayBuffer];
     if (length === undefined) {
       length = toFloat32AudioArray(input)[0]?.length ?? 0;
@@ -53,6 +53,6 @@ export async function offlineRender(
     transferrables,
   });
 
-  const audioBuffer = await toAudioBuffer(result as ArrayBuffer);
+  const audioBuffer = await toAudioBuffer(result as ArrayBuffer, sampleRate);
   return toFloat32AudioArray(audioBuffer);
 }

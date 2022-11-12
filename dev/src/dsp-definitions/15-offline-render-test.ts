@@ -4,14 +4,16 @@ import { offlineRender } from "mosfez-faust/offline-render";
 async function callback() {
   console.log("go");
 
+  const samples = [];
+  for (let i = 0; i < 100000; i++) {
+    samples.push(0.2);
+  }
+
   const params = {
     channels: 2,
     sampleRate: 48000,
-    length: 5,
-    input: [
-      [1, 0.5, 0, 3],
-      [1, 0.5, 0, 3],
-    ],
+    // length: 100,
+    input: [samples, samples],
     functionString: `exports.buildContext = async function buildContext(offlineCtx, source) {
       source.connect(offlineCtx.destination);
     };`,

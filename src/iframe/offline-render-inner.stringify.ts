@@ -27,7 +27,7 @@ export function offlineRenderInner(
     let source: AudioBufferSourceNode | undefined;
     if (inputArrayBuffer) {
       source = offlineContext.createBufferSource();
-      source.buffer = await toAudioBuffer(inputArrayBuffer, offlineContext);
+      source.buffer = await toAudioBuffer(inputArrayBuffer, sampleRate);
     }
 
     if (typeof callback !== "function") {
@@ -38,7 +38,7 @@ export function offlineRenderInner(
 
     source?.start();
     const audioBuffer = await offlineContext.startRendering();
-    const arrayBuffer = await toArrayBuffer(audioBuffer);
+    const arrayBuffer = await toArrayBuffer(audioBuffer, sampleRate);
     return [arrayBuffer, [arrayBuffer]];
   };
 }
