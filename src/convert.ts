@@ -7,6 +7,22 @@ export type Float32AudioArray = Float32Array[];
 export type AudioData = AudioArray | Float32Array[] | AudioBuffer | ArrayBuffer;
 
 //
+// internal utils
+//
+
+function createAudioCtx(
+  audioCtxOrSampleRate: AudioContext | OfflineAudioContext | number | undefined
+): AudioContext | OfflineAudioContext {
+  if (typeof audioCtxOrSampleRate === "number") {
+    return new AudioContext({ sampleRate: audioCtxOrSampleRate });
+  }
+  if (audioCtxOrSampleRate === undefined) {
+    return new AudioContext();
+  }
+  return audioCtxOrSampleRate;
+}
+
+//
 // type guards
 //
 
@@ -127,11 +143,12 @@ export function toFloat32AudioArray(
 
 export async function toAudioBuffer(
   input: AudioData,
-  audioCtx: AudioContext | OfflineAudioContext = new AudioContext()
+  audioCtxOrSampleRate?: AudioContext | OfflineAudioContext | number
 ): Promise<AudioBuffer> {
   if (isAudioBuffer(input)) {
     return input;
   }
+  const audioCtx = createAudioCtx(audioCtxOrSampleRate);
   if (isArrayBuffer(input)) {
     return arrayBufferToAudioBuffer(input, audioCtx);
   }
@@ -143,11 +160,12 @@ export async function toAudioBuffer(
 
 export async function toArrayBuffer(
   input: AudioData,
-  audioCtx: AudioContext | OfflineAudioContext = new AudioContext()
+  audioCtxOrSampleRate?: AudioContext | OfflineAudioContext | number
 ): Promise<ArrayBuffer> {
   if (isArrayBuffer(input)) {
     return input;
   }
+  const audioCtx = createAudioCtx(audioCtxOrSampleRate);
   const buffer = await toAudioBuffer(input, audioCtx);
   return audioBufferToWav(buffer, { float32: true });
 }
