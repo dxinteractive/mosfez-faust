@@ -54,7 +54,7 @@ export function PlotPanel(props: PlotPanelProps) {
           e.preventDefault();
           const nameCleaned = name.replace(/ /g, "-").toLowerCase();
           const filename = `${nameCleaned}-${output.name}`;
-          downloadWav(output.output, filename);
+          downloadWav(output.output, liveAudioContext, filename);
         };
 
         return (

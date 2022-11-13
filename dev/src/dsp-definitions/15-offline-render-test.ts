@@ -5,7 +5,7 @@ async function callback() {
   console.log("go");
 
   const samples = [];
-  for (let i = 0; i < 100000; i++) {
+  for (let i = 0; i < 10; i++) {
     samples.push(0.2);
   }
 

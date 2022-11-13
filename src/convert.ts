@@ -10,14 +10,13 @@ export type AudioData = AudioArray | Float32Array[] | AudioBuffer | ArrayBuffer;
 // internal utils
 //
 
+export type AudioCtxOrSampleRate = AudioContext | OfflineAudioContext | number;
+
 function createAudioCtx(
-  audioCtxOrSampleRate: AudioContext | OfflineAudioContext | number | undefined
+  audioCtxOrSampleRate: AudioCtxOrSampleRate
 ): AudioContext | OfflineAudioContext {
   if (typeof audioCtxOrSampleRate === "number") {
     return new AudioContext({ sampleRate: audioCtxOrSampleRate });
-  }
-  if (audioCtxOrSampleRate === undefined) {
-    return new AudioContext();
   }
   return audioCtxOrSampleRate;
 }
@@ -143,7 +142,7 @@ export function toFloat32AudioArray(
 
 export async function toAudioBuffer(
   input: AudioData,
-  audioCtxOrSampleRate?: AudioContext | OfflineAudioContext | number
+  audioCtxOrSampleRate: AudioCtxOrSampleRate
 ): Promise<AudioBuffer> {
   if (isAudioBuffer(input)) {
     return input;
@@ -160,7 +159,7 @@ export async function toAudioBuffer(
 
 export async function toArrayBuffer(
   input: AudioData,
-  audioCtxOrSampleRate?: AudioContext | OfflineAudioContext | number
+  audioCtxOrSampleRate: AudioCtxOrSampleRate
 ): Promise<ArrayBuffer> {
   if (isArrayBuffer(input)) {
     return input;
@@ -170,8 +169,11 @@ export async function toArrayBuffer(
   return audioBufferToWav(buffer, { float32: true });
 }
 
-export async function toWavBlob(input: AudioData): Promise<Blob> {
-  const buffer = await toArrayBuffer(input);
+export async function toWavBlob(
+  input: AudioData,
+  audioCtxOrSampleRate: AudioCtxOrSampleRate
+): Promise<Blob> {
+  const buffer = await toArrayBuffer(input, audioCtxOrSampleRate);
   return arrayBufferToWavBlob(buffer);
 }
 
@@ -179,8 +181,12 @@ export async function toWavBlob(input: AudioData): Promise<Blob> {
 // utils
 //
 
-export async function downloadWav(input: AudioData, name: string) {
-  const blob = await toWavBlob(input);
+export async function downloadWav(
+  input: AudioData,
+  audioCtxOrSampleRate: AudioCtxOrSampleRate,
+  name: string
+) {
+  const blob = await toWavBlob(input, audioCtxOrSampleRate);
   downloadBlob(blob, `${name}.wav`);
 }
 
