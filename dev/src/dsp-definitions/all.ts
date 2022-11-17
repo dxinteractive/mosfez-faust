@@ -16,6 +16,7 @@ import partialDetector from "./13-partial-detector";
 import pitchDown from "./14-pitch-down";
 import offlineRenderTest from "./15-offline-render-test";
 import offlineRenderDspTest from "./16-offline-render-dsp-test";
+import playBuffer from "./17-play-buffer";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -34,4 +35,5 @@ export const all: DspDefinition[] = [
   pitchDown,
   offlineRenderTest,
   offlineRenderDspTest,
+  playBuffer,
 ];
