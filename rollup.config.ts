@@ -7,6 +7,7 @@ const tsToJsEntrypoints = [
   "touch-start",
   "convert",
   "audio-source",
+  "play",
   "iframe/run-in-iframe-inner.stringify",
   "iframe/offline-render-inner.stringify",
   "iframe/offline-render-dsp-inner.stringify",

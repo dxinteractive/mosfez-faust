@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { DspDefinition, DspDefinitionOffline, isDspOffline } from "./types";
 
 import { compile } from "mosfez-faust/faust";
+import { playBuffer } from "mosfez-faust/play";
 import {
   toFloat32AudioArray,
   toAudioBuffer,
@@ -83,12 +84,7 @@ export async function faustOfflineRender(
       if (input.length === 0) {
         node.connect(offlineContext.destination);
       } else {
-        const source: AudioBufferSourceNode =
-          offlineContext.createBufferSource();
-        source.buffer = await toAudioBuffer(input, offlineContext);
-        source.connect(node);
-        node.connect(offlineContext.destination);
-        source.start();
+        playBuffer(await toAudioBuffer(input, offlineContext), offlineContext);
       }
 
       const renderedBuffer = await offlineContext.startRendering();
