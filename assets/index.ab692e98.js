@@ -459,10 +459,10 @@ return [getJSON`+factory_name1+", getBase64Code"+factory_name1+"];",evalResult=n
 `)}const vn=(Mn=(yn=rn[0])==null?void 0:yn.length)!=null?Mn:0,gn=new OfflineAudioContext(c,a!=null?a:vn,i);if(g){const Rn=await fetch(g);if(!Rn.ok)throw new Error(`Could not load sound file "${rn}"`);const An=await Rn.arrayBuffer(),Sn=await toAudioBuffer$2(An,gn);rn=toAudioArray(Sn)}console.log("input:"),logChannels(rn!=null?rn:[],console.log);const Pn=await compile(gn,cn);rn.length===0?Pn.connect(gn.destination):playBuffer(await toAudioBuffer$2(rn,gn),gn);const Nn=await gn.startRendering(),un=toFloat32AudioArray$2(Nn),ln=$?toFloat32AudioArray$2($[mn]):void 0;let fn=!0;return $&&(fn=JSON.stringify(un)===JSON.stringify(ln)),Pn.destroy(),{name:mn,output:un,expected:ln,passed:fn}},Promise.resolve({})));return cache.set(e,dn),dn}function useFaustOfflineRenderer(e){const[o,a]=react.exports.useState(void 0),i=react.exports.useRef(!1);return react.exports.useEffect(()=>{i.current||!isDspOffline(e)||(i.current=!0,faustOfflineRender(e).then(c=>{c.forEach(h=>{console.log(`${h.name}:`),logChannels(h.output,console.log),h.expected&&!h.passed&&(console.warn("incorrect output - expected:"),logChannels(h.expected,console.warn))}),a(c)}))},[e]),o}function useDspCallback(e,o){react.exports.useEffect(()=>{if(!isDspCallback(e))return;const a=e.callback(o);return()=>{(async()=>(await a)())()}},[e,o])}const dsp$b=`
 import("stdfaust.lib");
 process = os.osc(440.0);
-`,dspDefinition$f={id:"sine-wave",name:"Sine wave",description:"Makes a sine wave at 440Hz",dsp:dsp$b,type:"offline",outputLength:1e3,sampleRate:44100,channels:1},dsp$a=`
+`,dspDefinition$g={id:"sine-wave",name:"Sine wave",description:"Makes a sine wave at 440Hz",dsp:dsp$b,type:"offline",outputLength:1e3,sampleRate:44100,channels:1},dsp$a=`
 import("stdfaust.lib");
 process = *(0.5),*(0.25);
-`,dspDefinition$e={id:"attenuator",name:"Attenuator",description:"Makes an input signal quieter",dsp:dsp$a,type:"offline",input:[[4,3,2,1,2,3,4,5,5,5,5,5,5,5,5],[4,3,2,1,2,3,4,5,5,5,5,5,5,5,5]],channels:2,sampleRate:44100},dsp$9=`
+`,dspDefinition$f={id:"attenuator",name:"Attenuator",description:"Makes an input signal quieter",dsp:dsp$a,type:"offline",input:[[4,3,2,1,2,3,4,5,5,5,5,5,5,5,5],[4,3,2,1,2,3,4,5,5,5,5,5,5,5,5]],channels:2,sampleRate:44100},dsp$9=`
 import("stdfaust.lib");
 N = 3;
 scan = ba.selectn(N, ba.period(N));
@@ -477,7 +477,7 @@ find_by_index(op, n, x) = compute ~ (_,_,_,_) : (!,!,!,_)
   };
 
 process = scan : find_by_index(>, N);
-`,dspDefinition$d={id:"block-max",name:"Block max",description:"Finds the max value from a set of N parallel channels per N ticks",dsp:dsp$9,type:"offline",sampleRate:44100,channels:1,input:[[4,1,2,9,1,2,0,0,0,1,2,1,10,10,10],[3,4,5,3,4,3,0,1,0,3,4,4,11,11,11],[0,0,0,3,4,3,0,0,0,0,4,5,10,10,10]],output:["scan","process"],outputLength:18,expect:{scan:[[4,4,0,9,4,3,0,1,0,1,4,5,10,11,10,0,0,0]],process:[[0,0,0,1,1,1,0,0,0,1,1,1,2,2,2,1,1,1]]}},dsp$8=`
+`,dspDefinition$e={id:"block-max",name:"Block max",description:"Finds the max value from a set of N parallel channels per N ticks",dsp:dsp$9,type:"offline",sampleRate:44100,channels:1,input:[[4,1,2,9,1,2,0,0,0,1,2,1,10,10,10],[3,4,5,3,4,3,0,1,0,3,4,4,11,11,11],[0,0,0,3,4,3,0,0,0,0,4,5,10,10,10]],output:["scan","process"],outputLength:18,expect:{scan:[[4,4,0,9,4,3,0,1,0,1,4,5,10,11,10,0,0,0]],process:[[0,0,0,1,1,1,0,0,0,1,1,1,2,2,2,1,1,1]]}},dsp$8=`
 import("stdfaust.lib");
 
 tune1 = waveform{69,-1,73,-1,71,73,71,0};
@@ -501,10 +501,10 @@ voice2 = tunePlayer(tune2) : synth;
 voice3 = tunePlayer(tune3) : synth;
 
 process = voice1 + voice2 + voice3 <: _,_;
-`,dspDefinition$c={id:"live-tune",name:"Live tune",description:"Makes a live tune",dsp:dsp$8,type:"live"},dsp$7=`
+`,dspDefinition$d={id:"live-tune",name:"Live tune",description:"Makes a live tune",dsp:dsp$8,type:"live"},dsp$7=`
 import("stdfaust.lib");
 process = os.osc(440.0) <: ;
-`,dspDefinition$b={id:"syntax-error",name:"Syntax error",description:"Shows what happens if the dsp contains a syntax error.",dsp:dsp$7,type:"offline",outputLength:10,sampleRate:44100,channels:1},dsp$6=`
+`,dspDefinition$c={id:"syntax-error",name:"Syntax error",description:"Shows what happens if the dsp contains a syntax error.",dsp:dsp$7,type:"offline",outputLength:10,sampleRate:44100,channels:1},dsp$6=`
 import("stdfaust.lib");
 
 // osc
@@ -530,7 +530,7 @@ osc(f) = os.osc(f + (pmGain * envelop * os.osc(f * pmMulti / pmDenom))) : fi.dcb
 fx = osc(pitch : ba.midikey2hz) * vol * 0.3;
 
 process = fx <: _,_;
-`,dspDefinition$a={id:"pm-synth",name:"PM synth",description:"Phase modulation synth",dsp:dsp$6,type:"live"},dsp$5=`
+`,dspDefinition$b={id:"pm-synth",name:"PM synth",description:"Phase modulation synth",dsp:dsp$6,type:"live"},dsp$5=`
 import("stdfaust.lib");
 
 changed(x) = x != x';
@@ -552,13 +552,13 @@ knob = hslider("knob", 0.0, 0.0, 1.0, 0.001);
 layerOutput(i) = layerValue(layer,i,knob): hbargraph("value %i", 0.0, 1.0);
 
 process = par(i, 3, layerOutput(i));
-`,dspDefinition$9={id:"param-layers",name:"Param layers",description:"Control multiples variables via a single slider and a layer selector",dsp:dsp$5,type:"live"},dsp$4=`
+`,dspDefinition$a={id:"param-layers",name:"Param layers",description:"Control multiples variables via a single slider and a layer selector",dsp:dsp$5,type:"live"},dsp$4=`
 import("stdfaust.lib");
 process = _;
-`,dspDefinition$8={id:"passthrough-mono",name:"Passthrough mono",description:"Passes through a single mono signal",dsp:dsp$4,type:"live"},dsp$3=`
+`,dspDefinition$9={id:"passthrough-mono",name:"Passthrough mono",description:"Passes through a single mono signal",dsp:dsp$4,type:"live"},dsp$3=`
 import("stdfaust.lib");
 process = _,_;
-`,dspDefinition$7={id:"passthrough-stereo",name:"Passthrough stereo",description:"Passes through a stereo signal",dsp:dsp$3,type:"live"};async function callback$3(e){const o=await audioSource(e);return o.connect(e.destination),()=>{o.disconnect(e.destination)}}const dspDefinition$6={id:"record-line-in",name:"Record line-in",description:"Records a line-in signal into a buffer and plays it back.",type:"callback",callback:callback$3};var runInIframeInnerStringified$2=`"use strict";
+`,dspDefinition$8={id:"passthrough-stereo",name:"Passthrough stereo",description:"Passes through a stereo signal",dsp:dsp$3,type:"live"};async function callback$4(e){const o=await audioSource(e);return o.connect(e.destination),()=>{o.disconnect(e.destination)}}const dspDefinition$7={id:"record-line-in",name:"Record line-in",description:"Records a line-in signal into a buffer and plays it back.",type:"callback",callback:callback$4};var runInIframeInnerStringified$2=`"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 async function receiveParams() {
   return new Promise((resolve) => {
@@ -586,17 +586,17 @@ exports.runInIframeInner = runInIframeInner;
       ${o}
       ${runInIframeInnerStringified$2}
       exports.runInIframeInner(exports.run);
-    <\/script>`),new Promise(g=>{const Z=$=>{$.source===h&&(window.removeEventListener("message",Z),c.remove(),g($.data))};window.addEventListener("message",Z),h.postMessage(a,window.location.origin,i)})}async function callback$2(){console.log("go");const e=await runInIframe$2({functionString:`
+    <\/script>`),new Promise(g=>{const Z=$=>{$.source===h&&(window.removeEventListener("message",Z),c.remove(),g($.data))};window.addEventListener("message",Z),h.postMessage(a,window.location.origin,i)})}async function callback$3(){console.log("go");const e=await runInIframe$2({functionString:`
     exports.run = async function run(params) {
       const audioArray = [[params.foo,1,2,3,4,5,6,7,8,9,10]];
       return [{audioArray}];
     };
-  `,params:{foo:9}});return console.log("result",e),()=>{}}const dspDefinition$5={id:"iframe-render-test",name:"Iframe render test",description:"Try to render data in an iframe",type:"callback",callback:callback$2},dsp$2=`
+  `,params:{foo:9}});return console.log("result",e),()=>{}}const dspDefinition$6={id:"iframe-render-test",name:"Iframe render test",description:"Try to render data in an iframe",type:"callback",callback:callback$3},dsp$2=`
 import("stdfaust.lib");
 input = _,_;
 louder = *(4.0);
 process = input : louder,louder;
-`,dspDefinition$4={id:"sample-input-offline",name:"Sample input",description:"Pipes a sample into an offline render",dsp:dsp$2,type:"offline",inputFile:"/audio/tonejs-instruments/harp/B5.wav",output:["input","process"],outputLength:44100,sampleRate:44100,channels:1},dsp$1=`
+`,dspDefinition$5={id:"sample-input-offline",name:"Sample input",description:"Pipes a sample into an offline render",dsp:dsp$2,type:"offline",inputFile:"/audio/tonejs-instruments/harp/B5.wav",output:["input","process"],outputLength:44100,sampleRate:44100,channels:1},dsp$1=`
 import("stdfaust.lib");
 
 //
@@ -665,7 +665,7 @@ levels_to_note = scan : find_by_index(>, bands) : +(note) <: attach(_, hbargraph
 play_note(n) = os.square(ba.midikey2hz(n)) : *(0.1);
 
 process = tune : wet_dry(detect_levels : levels_to_note : play_note) : _,_;
-`,dspDefinition$3={id:"partial-detector",name:"Partial detector",description:"A filter to isolate narrow bands of frequency content",dsp:dsp$1,type:"live"},dsp=`
+`,dspDefinition$4={id:"partial-detector",name:"Partial detector",description:"A filter to isolate narrow bands of frequency content",dsp:dsp$1,type:"live"},dsp=`
 import("stdfaust.lib");
 
 //
@@ -713,7 +713,7 @@ table = _ <: it.frwtable(2,tablesize,0.0,write_index,_,read_index);
 
 bypass_fade_time_samples = bypass_fade_time * ma.SR : int;
 process = input : ba.bypass_fade(bypass_fade_time_samples, trigger == 0, table) <: _,_;
-`,dspDefinition$2={id:"pitch-down",name:"Pitch down",description:"Captures live input and plays it back slightly slower on a trigger",dsp,type:"live"};var offlineRenderInnerStringified$1=`"use strict";
+`,dspDefinition$3={id:"pitch-down",name:"Pitch down",description:"Captures live input and plays it back slightly slower on a trigger",dsp,type:"live"};var offlineRenderInnerStringified$1=`"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 function audioBufferToWav(buffer, opt) {
   opt = opt || {};
@@ -889,9 +889,9 @@ exports.runInIframeInner = runInIframeInner;
       ${offlineRenderInnerStringified$1}
       ${o}
       exports.run = exports.offlineRenderInner(exports.buildContext);
-    `,params:{channels:a,sampleRate:i,inputArrayBuffer:Z,length:g!=null?g:0,props:h},transferrables:$}),dn=await toAudioBuffer$1(rn,i);return toFloat32AudioArray$1(dn)}async function callback$1(){console.log("go");const e=[];for(let a=0;a<10;a++)e.push(.2);return console.log("result",await offlineRender$1({channels:2,sampleRate:48e3,input:[e,e],functionString:`exports.buildContext = async function buildContext(offlineCtx, source) {
+    `,params:{channels:a,sampleRate:i,inputArrayBuffer:Z,length:g!=null?g:0,props:h},transferrables:$}),dn=await toAudioBuffer$1(rn,i);return toFloat32AudioArray$1(dn)}async function callback$2(){console.log("go");const e=[];for(let a=0;a<10;a++)e.push(.2);return console.log("result",await offlineRender$1({channels:2,sampleRate:48e3,input:[e,e],functionString:`exports.buildContext = async function buildContext(offlineCtx, source) {
       source.connect(offlineCtx.destination);
-    };`})),()=>{}}const dspDefinition$1={id:"offline-render-test",name:"Offline render test",description:"Try to render audio offline",type:"callback",callback:callback$1};var offlineRenderDspInnerStringified=`"use strict";
+    };`})),()=>{}}const dspDefinition$2={id:"offline-render-test",name:"Offline render test",description:"Try to render audio offline",type:"callback",callback:callback$2};var offlineRenderDspInnerStringified=`"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var FaustModule = function() {
   var _scriptDir = typeof document !== "undefined" && document.currentScript ? document.currentScript.src : void 0;
@@ -11108,8 +11108,8 @@ exports.runInIframeInner = runInIframeInner;
     `,params:{channels:a,sampleRate:i,inputArrayBuffer:Z,length:g!=null?g:0,props:h},transferrables:$}),dn=await toAudioBuffer(rn,i);return toFloat32AudioArray(dn)}async function offlineRenderDsp(e){const{dsp:o,...a}=e;return offlineRender({functionString:`
       ${offlineRenderDspInnerStringified}
       exports.buildContext = exports.offlineRenderDspInner;
-    `,props:{dsp:o},...a})}async function callback(){console.log("go");const e={channels:2,sampleRate:48e3,input:[[1,2,3,0,5,6,7,8,9,10],[1,2,3,0,5,6,7,8,9,10]],dsp:`import("stdfaust.lib");
-    process = *(0.5),*(2);`};for(let o=0;o<3;o++)console.log("result",await offlineRenderDsp(e));return()=>{}}const dspDefinition={id:"offline-render-dsp-test",name:"Offline render DSP test",description:"Try to render Faust DSP offline",type:"callback",callback},all=[dspDefinition$f,dspDefinition$e,dspDefinition$d,dspDefinition$c,dspDefinition$b,dspDefinition$a,dspDefinition$9,dspDefinition$8,dspDefinition$7,dspDefinition$6,dspDefinition$5,dspDefinition$4,dspDefinition$3,dspDefinition$2,dspDefinition$1,dspDefinition],control="_control_sxngc_1",value="_value_sxngc_8",button="_button_sxngc_12",inputContainer="_inputContainer_sxngc_16",inputRange="_inputRange_sxngc_20";var classes$2={control,value,button,inputContainer,inputRange};const useAnimationFrame=(e,o)=>{const a=react.exports.useRef(0),i=react.exports.useRef(performance.now()),c=react.exports.useRef(performance.now()),h=()=>{const g=performance.now(),Z=(g-c.current)/1e3,$=(g-i.current)/1e3;e(Z,$),i.current=g,a.current=requestAnimationFrame(h)};react.exports.useEffect(()=>(a.current=requestAnimationFrame(h),()=>cancelAnimationFrame(a.current)),o)};var jsxRuntime={exports:{}},reactJsxRuntime_production_min={};/**
+    `,props:{dsp:o},...a})}async function callback$1(){console.log("go");const e={channels:2,sampleRate:48e3,input:[[1,2,3,0,5,6,7,8,9,10],[1,2,3,0,5,6,7,8,9,10]],dsp:`import("stdfaust.lib");
+    process = *(0.5),*(2);`};for(let o=0;o<3;o++)console.log("result",await offlineRenderDsp(e));return()=>{}}const dspDefinition$1={id:"offline-render-dsp-test",name:"Offline render DSP test",description:"Try to render Faust DSP offline",type:"callback",callback:callback$1};let registered=!1;async function callback(e){const o=await fetch("/audio/tonejs-instruments/harp/B5.wav");if(!o.ok)throw new Error("Could not load sound file");const a=await o.arrayBuffer(),i=await toAudioBuffer$2(a,e);async function c(){console.log("play stuff");for(let h=0;h<64;h++)playBuffer(i,e),await new Promise(g=>setTimeout(g,20))}return registered||(registered=!0,document.addEventListener("click",c),console.log("ready")),()=>{}}const dspDefinition={id:"play-buffer",name:"Play buffer",description:"Tests the playBuffer utility",type:"callback",callback},all=[dspDefinition$g,dspDefinition$f,dspDefinition$e,dspDefinition$d,dspDefinition$c,dspDefinition$b,dspDefinition$a,dspDefinition$9,dspDefinition$8,dspDefinition$7,dspDefinition$6,dspDefinition$5,dspDefinition$4,dspDefinition$3,dspDefinition$2,dspDefinition$1,dspDefinition],control="_control_sxngc_1",value="_value_sxngc_8",button="_button_sxngc_12",inputContainer="_inputContainer_sxngc_16",inputRange="_inputRange_sxngc_20";var classes$2={control,value,button,inputContainer,inputRange};const useAnimationFrame=(e,o)=>{const a=react.exports.useRef(0),i=react.exports.useRef(performance.now()),c=react.exports.useRef(performance.now()),h=()=>{const g=performance.now(),Z=(g-c.current)/1e3,$=(g-i.current)/1e3;e(Z,$),i.current=g,a.current=requestAnimationFrame(h)};react.exports.useEffect(()=>(a.current=requestAnimationFrame(h),()=>cancelAnimationFrame(a.current)),o)};var jsxRuntime={exports:{}},reactJsxRuntime_production_min={};/**
  * @license React
  * react-jsx-runtime.production.min.js
  *
