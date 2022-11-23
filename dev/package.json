@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build-gh-pages": "tsc && vite build --base=/mosfez-faust/",
+    "build-gh-pages": "tsc && vite build --base=/mosfez-faust/ --mode=deployed",
     "preview": "vite preview"
   },
   "dependencies": {

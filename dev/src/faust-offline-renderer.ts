@@ -8,6 +8,7 @@ import {
   toAudioBuffer,
   toAudioArray,
 } from "mosfez-faust/convert";
+import { fetchFile } from "./fetch";
 
 function logChannels(
   arr: Float32Array[] | number[][],
@@ -66,7 +67,7 @@ export async function faustOfflineRender(
       );
 
       if (inputFile) {
-        const response = await fetch(inputFile);
+        const response = await fetchFile(inputFile);
         if (!response.ok) {
           throw new Error(`Could not load sound file "${input}"`);
         }

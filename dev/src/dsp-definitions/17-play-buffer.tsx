@@ -1,9 +1,10 @@
 import type { DspDefinition } from "../types";
 import { playBuffer } from "mosfez-faust/play";
 import { toAudioBuffer } from "mosfez-faust/convert";
+import { fetchFile } from "../fetch";
 
 async function playSounds(liveAudioContext: AudioContext) {
-  const response = await fetch("/audio/tonejs-instruments/harp/B5.wav");
+  const response = await fetchFile("/audio/tonejs-instruments/harp/B5.wav");
   if (!response.ok) {
     throw new Error(`Could not load sound file`);
   }
