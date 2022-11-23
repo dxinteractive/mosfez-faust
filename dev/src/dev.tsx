@@ -77,7 +77,7 @@ function List() {
   return (
     <>
       <ListHeader>
-        Faust sketches -{" "}
+        Faust and WebAudio API sketches -{" "}
         <a
           className={classes.link}
           href="https://github.com/dxinteractive/mosfez-faust"
