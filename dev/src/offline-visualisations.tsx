@@ -31,9 +31,23 @@ export function PlotPanel(props: PlotPanelProps) {
 
   const [[pan, zoomWidth, highlight], setPlotState] = useState([0, 8, -1]);
 
+  const offlineResultFlattened: Output[] = [];
+  offlineResult.forEach((output) => {
+    if (output.output.length === 1) {
+      offlineResultFlattened.push(output);
+      return;
+    }
+    output.output.forEach((outputChannel, index) => {
+      offlineResultFlattened.push({
+        name: `${output.name} #${index}`,
+        output: [outputChannel],
+      });
+    });
+  });
+
   return (
     <>
-      {offlineResult.map((output, i) => {
+      {offlineResultFlattened.map((output, i) => {
         let highlightValue = <span />;
         if (highlight !== -1) {
           highlightValue = (
@@ -196,7 +210,7 @@ export function Plot(props: PlotProps) {
 
     if (drawContext) {
       drawContext.clearRect(0, 0, width, height);
-      const max = Math.min(width, output.output[0].length) / zoomWidth;
+      const max = width / zoomWidth;
       for (let x = 0; x < max; x++) {
         const index = x + Math.floor(pan);
         const xvalue = output.output[0][index];

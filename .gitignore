@@ -108,3 +108,4 @@ dist
 
 # Large files
 dev/public/audio
+!dev/public/audio/tonejs-instruments/harp/B5.wav

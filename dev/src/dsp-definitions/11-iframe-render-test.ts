@@ -1,7 +1,10 @@
-import type { DspDefinition } from "../types";
+import type { DspDefinition, RenderResults } from "../types";
 import { runInIframe } from "mosfez-faust/run-in-iframe";
 
-async function callback() {
+async function callback(
+  _liveAudioContext: AudioContext,
+  renderResults: RenderResults
+) {
   console.log("go");
   const result = await runInIframe({
     functionString: `
@@ -13,6 +16,14 @@ async function callback() {
     params: { foo: 9 },
   });
   console.log("result", result);
+
+  renderResults([
+    {
+      name: "audioArray",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      output: (result as any).audioArray,
+    },
+  ]);
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   return () => {};
