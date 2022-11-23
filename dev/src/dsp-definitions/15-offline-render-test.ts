@@ -1,7 +1,10 @@
-import type { DspDefinition } from "../types";
+import type { DspDefinition, RenderResults } from "../types";
 import { offlineRender } from "mosfez-faust/offline-render";
 
-async function callback() {
+async function callback(
+  _liveAudioContext: AudioContext,
+  renderResults: RenderResults
+) {
   console.log("go");
 
   const samples = [];
@@ -19,7 +22,17 @@ async function callback() {
     };`,
   };
 
-  console.log("result", await offlineRender(params));
+  const result = await offlineRender(params);
+
+  console.log("result", result);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  renderResults([
+    {
+      name: "result",
+      output: result,
+    },
+  ]);
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   return () => {};

@@ -107,4 +107,4 @@ dist
 .DS_Store
 
 # Large files
-dev/public/audio
+/dev/public/audio-local/*

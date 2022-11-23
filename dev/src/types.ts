@@ -25,12 +25,22 @@ export type DspDefinitionOffline = DspDefinitionCommon & {
 
 export type DspDefinitionComponent = DspDefinitionCommon & {
   type: "component";
-  component: () => React.ReactElement;
+  component: (liveAudioContext: AudioContext) => React.ReactElement;
 };
+
+export type RenderResultsOutput = {
+  name: string;
+  output: Float32Array[];
+};
+
+export type RenderResults = (outputs: RenderResultsOutput[]) => void;
 
 export type DspDefinitionCallback = DspDefinitionCommon & {
   type: "callback";
-  callback: (audioContext: AudioContext) => Promise<() => void>;
+  callback: (
+    audioContext: AudioContext,
+    renderResult: RenderResults
+  ) => Promise<() => void>;
 };
 
 export type DspDefinition =

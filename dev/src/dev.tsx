@@ -6,6 +6,7 @@ import classes from "./dev.module.css";
 import { useFaustLivePlayer } from "./faust-live-player";
 import { useFaustOfflineRenderer } from "./faust-offline-renderer";
 import { useDspCallback } from "./dsp-callback";
+import { useDspComponent } from "./dsp-component";
 import { all } from "./dsp-definitions/all";
 import { Controls } from "./controls";
 import { OscopePanel } from "./live-visualisations";
@@ -121,10 +122,10 @@ function DspRoute() {
 }
 
 const TYPE_DESCS = {
-  offline: "open your browser console to see DSP output",
+  offline: "see charts below, open your browser console to see DSP values",
   live: "DSP will play sound once successfully compiled",
-  component: "",
-  callback: "",
+  component: "follow instructions below",
+  callback: "JavaScript will be executed immediately, charts may appear below",
 };
 
 type DspProps = {
@@ -140,7 +141,9 @@ function Dsp(props: DspProps) {
 
   const liveResult = useFaustLivePlayer(liveAudioContext, dspDefinition);
   const offlineResult = useFaustOfflineRenderer(dspDefinition);
-  useDspCallback(dspDefinition, liveAudioContext);
+  const dspResult = useDspCallback(dspDefinition, liveAudioContext);
+  const dspComponentResult = useDspComponent(dspDefinition, liveAudioContext);
+  const offlineResultToPlot = offlineResult ?? dspResult;
   const { width } = useWindowSize();
 
   let desc = TYPE_DESCS[dspDefinition.type];
@@ -180,16 +183,19 @@ function Dsp(props: DspProps) {
           )}
         </div>
       )}
-      {offlineResult && (
+      {offlineResultToPlot && offlineResultToPlot.length > 0 && (
         <div className={classes.dspContent}>
           <PlotPanel
             name={name}
-            offlineResult={offlineResult}
+            offlineResult={offlineResultToPlot}
             width={width - 36}
             height={200}
             liveAudioContext={liveAudioContext}
           />
         </div>
+      )}
+      {dspComponentResult && (
+        <div className={classes.dspContent}>{dspComponentResult}</div>
       )}
       <div className={classes.dspContent}>
         {dsp && <pre className={classes.dspPre}>{dsp}</pre>}
