@@ -38,6 +38,10 @@ export function useFaustLivePlayer(
       node.connect(audioContext.destination);
       audioNode.current = node;
 
+      audioContext.destination.channelCount =
+        audioContext.destination.maxChannelCount;
+      audioContext.destination.channelCountMode = "explicit";
+
       setResult({
         ui: node.ui,
         params: node.getParams(),

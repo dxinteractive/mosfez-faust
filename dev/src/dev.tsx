@@ -24,7 +24,8 @@ import {
 import { DspDefinition } from "./types";
 
 import { touchStart } from "mosfez-faust/touch-start";
-const liveAudioContext = new window.AudioContext();
+
+const liveAudioContext = new AudioContext();
 touchStart(liveAudioContext);
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
