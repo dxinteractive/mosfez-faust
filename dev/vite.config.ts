@@ -28,7 +28,4 @@ export default defineConfig({
       include: `**/*.stringify.js`,
     }),
   ],
-  optimizeDeps: {
-    exclude: ["ws"],
-  },
 });

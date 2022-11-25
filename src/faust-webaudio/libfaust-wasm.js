@@ -4662,7 +4662,8 @@ var FaustModule = (function () {
               }
               var WebSocketConstructor;
               if (ENVIRONMENT_IS_NODE) {
-                WebSocketConstructor = require("ws");
+                // REMOVED: serverside websocket require statements that get turned into failing imports when compiled
+                // WebSocketConstructor = require("ws");
               } else {
                 WebSocketConstructor = WebSocket;
               }
@@ -4904,45 +4905,46 @@ var FaustModule = (function () {
           throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
         },
         listen: function (sock, backlog) {
-          if (!ENVIRONMENT_IS_NODE) {
-            throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
-          }
-          if (sock.server) {
-            throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
-          }
-          var WebSocketServer = require("ws").Server;
-          var host = sock.saddr;
-          sock.server = new WebSocketServer({ host: host, port: sock.sport });
-          Module["websocket"].emit("listen", sock.stream.fd);
-          sock.server.on("connection", function (ws) {
-            if (sock.type === 1) {
-              var newsock = SOCKFS.createSocket(
-                sock.family,
-                sock.type,
-                sock.protocol
-              );
-              var peer = SOCKFS.websocket_sock_ops.createPeer(newsock, ws);
-              newsock.daddr = peer.addr;
-              newsock.dport = peer.port;
-              sock.pending.push(newsock);
-              Module["websocket"].emit("connection", newsock.stream.fd);
-            } else {
-              SOCKFS.websocket_sock_ops.createPeer(sock, ws);
-              Module["websocket"].emit("connection", sock.stream.fd);
-            }
-          });
-          sock.server.on("closed", function () {
-            Module["websocket"].emit("close", sock.stream.fd);
-            sock.server = null;
-          });
-          sock.server.on("error", function (error) {
-            sock.error = ERRNO_CODES.EHOSTUNREACH;
-            Module["websocket"].emit("error", [
-              sock.stream.fd,
-              sock.error,
-              "EHOSTUNREACH: Host is unreachable",
-            ]);
-          });
+          // REMOVED: serverside websocket require statements that get turned into failing imports when compiled
+          // if (!ENVIRONMENT_IS_NODE) {
+          //   throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
+          // }
+          // if (sock.server) {
+          //   throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+          // }
+          // var WebSocketServer = require("ws").Server;
+          // var host = sock.saddr;
+          // sock.server = new WebSocketServer({ host: host, port: sock.sport });
+          // Module["websocket"].emit("listen", sock.stream.fd);
+          // sock.server.on("connection", function (ws) {
+          //   if (sock.type === 1) {
+          //     var newsock = SOCKFS.createSocket(
+          //       sock.family,
+          //       sock.type,
+          //       sock.protocol
+          //     );
+          //     var peer = SOCKFS.websocket_sock_ops.createPeer(newsock, ws);
+          //     newsock.daddr = peer.addr;
+          //     newsock.dport = peer.port;
+          //     sock.pending.push(newsock);
+          //     Module["websocket"].emit("connection", newsock.stream.fd);
+          //   } else {
+          //     SOCKFS.websocket_sock_ops.createPeer(sock, ws);
+          //     Module["websocket"].emit("connection", sock.stream.fd);
+          //   }
+          // });
+          // sock.server.on("closed", function () {
+          //   Module["websocket"].emit("close", sock.stream.fd);
+          //   sock.server = null;
+          // });
+          // sock.server.on("error", function (error) {
+          //   sock.error = ERRNO_CODES.EHOSTUNREACH;
+          //   Module["websocket"].emit("error", [
+          //     sock.stream.fd,
+          //     sock.error,
+          //     "EHOSTUNREACH: Host is unreachable",
+          //   ]);
+          // });
         },
         accept: function (listensock) {
           if (!listensock.server) {
