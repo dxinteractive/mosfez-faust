@@ -1117,6 +1117,9 @@ faust.createDSPInstance = function (factory, context, buffer_size, callback) {
           sp.pathTable[item.address] = parseInt(item.index);
           if (item.meta !== undefined) {
             for (var i = 0; i < item.meta.length; i++) {
+              if (item.meta[i].style !== undefined) {
+                sp.inputs_meta[item.address] = item.meta[i].style
+              }
               if (item.meta[i].midi !== undefined) {
                 if (item.meta[i].midi.trim() === "pitchwheel") {
                   sp.fPitchwheelLabel.push({
@@ -1862,6 +1865,9 @@ faust.createDSPWorkletInstanceAux = function (factory, context, callback) {
         // Decode MIDI
         if (item.meta !== undefined) {
           for (var i = 0; i < item.meta.length; i++) {
+            if (item.meta[i].style !== undefined) {
+              obj.inputs_meta[item.address] = item.meta[i].style;
+            }
             if (item.meta[i].midi !== undefined) {
               if (item.meta[i].midi.trim() === "pitchwheel") {
                 obj.fPitchwheelLabel.push({
@@ -1891,6 +1897,9 @@ faust.createDSPWorkletInstanceAux = function (factory, context, callback) {
     // input/output items
     this.inputs_items = [];
     this.outputs_items = [];
+
+    // input meta
+    this.inputs_meta = {};
 
     // MIDI
     this.fPitchwheelLabel = [];
@@ -1930,9 +1939,18 @@ faust.createDSPWorkletInstanceAux = function (factory, context, callback) {
   audio_node.setParamValue = function (path, val) {
     this.parameters.get(path).setValueAtTime(val, 0);
   };
+  audio_node.setParamValueAtTime = function (path, val, time) {
+    this.parameters.get(path).setValueAtTime(val, time);
+  }
   audio_node.getParamValue = function (path) {
     return this.parameters.get(path).value;
   };
+  audio_node.getRawParam = function (path) {
+    return this.parameters.get(path);
+  }
+  audio_node.getMeta = function() {
+    return this.inputs_meta;
+  }
 
   // REMOVED: WAP not needed
   // For WAP

@@ -68,10 +68,13 @@ export type FaustNode = AudioNode & {
   init: () => void;
   getJSON: () => string;
   setParamValue: (path: string, val: number) => void;
+  setParamValueAtTime: (path: string, val: number, time: number) => void;
+  getRawParam: (path: string) => AudioParam | undefined;
   getParamValue: (path: string) => number;
   getNumInputs: () => number;
   getNumOutputs: () => number;
   getParams: () => string[];
+  getMeta: () => { [id:string]: string }
   destroy: () => void;
   // added in compile()
   ui: UIItem[];
