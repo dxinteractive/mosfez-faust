@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DspDefinition, isDspCallback, RenderResultsOutput } from "./types";
 
 export function useDspCallback(
@@ -7,8 +7,11 @@ export function useDspCallback(
 ): RenderResultsOutput[] {
   const [output, setOutput] = useState<RenderResultsOutput[]>([]);
 
+  const started = useRef(false);
+
   useEffect(() => {
-    if (!isDspCallback(dspDefinition)) return;
+    if (!isDspCallback(dspDefinition) || started.current) return;
+    started.current = true;
 
     const cleanup = dspDefinition.callback(liveAudioContext, setOutput);
     return () => {

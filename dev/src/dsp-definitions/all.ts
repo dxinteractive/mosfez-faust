@@ -18,6 +18,7 @@ import offlineRenderTest from "./15-offline-render-test";
 import offlineRenderDspTest from "./16-offline-render-dsp-test";
 import playBuffer from "./17-play-buffer";
 import outputChannelTest from "./18-output-channel-test";
+import chainBuffer from "./19-chain-buffer";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -38,4 +39,5 @@ export const all: DspDefinition[] = [
   offlineRenderDspTest,
   playBuffer,
   outputChannelTest,
+  chainBuffer,
 ];
