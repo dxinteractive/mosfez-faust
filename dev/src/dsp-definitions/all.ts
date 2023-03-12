@@ -19,6 +19,8 @@ import offlineRenderDspTest from "./16-offline-render-dsp-test";
 import playBuffer from "./17-play-buffer";
 import outputChannelTest from "./18-output-channel-test";
 import chainBuffer from "./19-chain-buffer";
+import pitchFlattening from "./20-pitch-flattening";
+import pitchBending from "./21-pitch-bending";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -40,4 +42,6 @@ export const all: DspDefinition[] = [
   playBuffer,
   outputChannelTest,
   chainBuffer,
+  pitchFlattening,
+  pitchBending,
 ];
