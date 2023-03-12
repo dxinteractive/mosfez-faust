@@ -21,6 +21,7 @@ import outputChannelTest from "./18-output-channel-test";
 import chainBuffer from "./19-chain-buffer";
 import pitchFlattening from "./20-pitch-flattening";
 import pitchBending from "./21-pitch-bending";
+import comparePitches from "./22-compare-recorded-pitches";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -44,4 +45,5 @@ export const all: DspDefinition[] = [
   chainBuffer,
   pitchFlattening,
   pitchBending,
+  comparePitches,
 ];
