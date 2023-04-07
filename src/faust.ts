@@ -74,7 +74,7 @@ export type FaustNode = AudioNode & {
   getNumInputs: () => number;
   getNumOutputs: () => number;
   getParams: () => string[];
-  getMeta: () => { [id:string]: string }
+  getMeta: () => { [id: string]: string };
   destroy: () => void;
   // added in compile()
   ui: UIItem[];
@@ -87,10 +87,16 @@ export type FaustNode = AudioNode & {
 // so if you fire off many compilation requests, it'll make many duplicate factories
 const factoryCache = new Map<string, Promise<unknown>>();
 
+// compiles a faust worklet factory and creates a worklet from it
 export async function compile(
   audioContext: AudioContext | OfflineAudioContext,
   dsp: string
 ): Promise<FaustNode> {
+  return (await compileFactory(dsp)).createNode(audioContext);
+}
+
+// compiles a faust worklet factory
+export async function compileFactory(dsp: string): Promise<DspFactory> {
   const argv = ["-ftz", "2", "-I", "http://127.0.0.1:8000/../../libraries/"];
 
   let factoryPromise = factoryCache.get(dsp);
@@ -105,30 +111,41 @@ export async function compile(
   if (!factory) {
     throw new Error(faust.error_msg);
   }
+  return new DspFactory(factory);
+}
 
-  const node: FaustNode = await new Promise((resolve) =>
-    faust.createDSPWorkletInstance(factory, audioContext, resolve)
-  );
+export class DspFactory {
+  private _factory: unknown;
 
-  if (!node) {
-    throw new Error(faust.error_msg);
+  constructor(factory: unknown) {
+    this._factory = factory;
   }
 
-  node.ui = JSON.parse(node.getJSON()).ui;
+  async createNode(audioContext: AudioContext | OfflineAudioContext) {
+    const node: FaustNode = await new Promise((resolve) =>
+      faust.createDSPWorkletInstance(this._factory, audioContext, resolve)
+    );
 
-  const outputValues = new Map<string, number>();
+    if (!node) {
+      throw new Error(faust.error_msg);
+    }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  node.setOutputParamHandler((path: string, value: number) => {
-    outputValues.set(path, value);
-  });
+    node.ui = JSON.parse(node.getJSON()).ui;
 
-  node.getOutputValue = (path: string): number => {
-    return outputValues.get(path) ?? 0;
-  };
+    const outputValues = new Map<string, number>();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return node;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    node.setOutputParamHandler((path: string, value: number) => {
+      outputValues.set(path, value);
+    });
+
+    node.getOutputValue = (path: string): number => {
+      return outputValues.get(path) ?? 0;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return node;
+  }
 }
