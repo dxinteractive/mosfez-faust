@@ -39,6 +39,27 @@ async function startSines() {
 }
 ```
 
+Or to separately create a factory and worklet nodes:
+
+```js
+import { compileFactory } from "mosfez-faust/faust";
+import { touchStart } from "mosfez-faust/touch-start";
+
+const audioContext = new window.AudioContext();
+touchStart(audioContext);
+
+async function startSines() {
+  const dsp = `
+    import("stdfaust.lib");
+    process = os.osc(440.0),os.osc(441.0);
+  `;
+
+  const factory = await compileFactory(dsp);
+  const node = await factory.createNode(audioContext);
+  node.connect(audioContext.destination);
+}
+```
+
 Also some general purpose web audio conversion utilities can be found at:
 
 ```js
