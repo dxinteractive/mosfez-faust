@@ -22,6 +22,10 @@ import chainBuffer from "./19-chain-buffer";
 import pitchFlattening from "./20-pitch-flattening";
 import pitchBending from "./21-pitch-bending";
 import comparePitches from "./22-compare-recorded-pitches";
+import zeroCrossingDetection from "./23-zero-crossing-detection";
+import pitchtracker from "./24-pitchtracker";
+import autocorrelation from "./25-autocorrelation";
+import envelopeDetector from "./26-envelope-detector";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -46,4 +50,8 @@ export const all: DspDefinition[] = [
   pitchFlattening,
   pitchBending,
   comparePitches,
+  zeroCrossingDetection,
+  pitchtracker,
+  autocorrelation,
+  envelopeDetector,
 ];
