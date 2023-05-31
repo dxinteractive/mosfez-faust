@@ -13,9 +13,14 @@ import type { FaustNode } from "mosfez-faust/faust";
 
 import { useAnimationFrame } from "./utils/use-animation-frame";
 
+export type ControlNode = Pick<
+  FaustNode,
+  "setParamValue" | "getParamValue" | "getOutputValue"
+>;
+
 export type ControlsProps = {
   items: UIItem[];
-  node: FaustNode;
+  node: ControlNode;
 };
 
 export function Controls(props: ControlsProps) {
@@ -31,7 +36,7 @@ export function Controls(props: ControlsProps) {
 
 type ControlProps = {
   item: UIItem;
-  node: FaustNode;
+  node: ControlNode;
 };
 
 function Control(props: ControlProps) {

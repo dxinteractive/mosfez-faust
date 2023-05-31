@@ -161,6 +161,16 @@ function Dsp(props: DspProps) {
         type: {dspDefinition.type}
         {desc}
       </div>
+      {offlineResult &&
+        offlineResult.length > 0 &&
+        offlineResult[0].params.length > 0 && (
+          <div className={classes.dspContent}>
+            <Controls
+              items={offlineResult[0].ui}
+              node={offlineResult[0].node}
+            />
+          </div>
+        )}
       {liveResult && liveResult.params.length > 0 && (
         <div className={classes.dspContent}>
           <Controls items={liveResult.ui} node={liveResult.node} />

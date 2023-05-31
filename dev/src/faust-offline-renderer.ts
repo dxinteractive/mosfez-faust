@@ -1,14 +1,44 @@
 import { useEffect, useState, useRef } from "react";
 import { DspDefinition, DspDefinitionOffline, isDspOffline } from "./types";
 
-import { compile } from "mosfez-faust/faust";
-import { playBuffer } from "mosfez-faust/play";
+import { FaustNode, UIItem, compile, isUItemGroup } from "mosfez-faust/faust";
 import {
   toFloat32AudioArray,
   toAudioBuffer,
   toAudioArray,
 } from "mosfez-faust/convert";
 import { fetchFile } from "./fetch";
+import { ControlNode } from "./controls";
+
+function addToParamsObject(
+  params: Record<string, number>,
+  items: UIItem[],
+  node: FaustNode
+): Record<string, number> {
+  items.forEach((item) => {
+    if (isUItemGroup(item)) {
+      addToParamsObject(params, item.items, node);
+    } else {
+      params[item.address] = node.getParamValue(item.address);
+    }
+  });
+  return params;
+}
+
+function setParamsOnNode(
+  params: Record<string, number>,
+  items: UIItem[],
+  node: FaustNode
+): Record<string, number> {
+  items.forEach((item) => {
+    if (isUItemGroup(item)) {
+      setParamsOnNode(params, item.items, node);
+    } else {
+      node.setParamValue(item.address, params[item.address]);
+    }
+  });
+  return params;
+}
 
 function logChannels(
   arr: Float32Array[] | number[][],
@@ -17,20 +47,34 @@ function logChannels(
   arr.forEach((channel) => log(Array.from(channel)));
 }
 
+export type OfflineRenderOutput = {
+  name: string;
+  output: Float32Array[];
+  expected?: Float32Array[];
+  passed: boolean;
+  params: string[];
+  ui: UIItem[];
+  initialParams: Record<string, number>;
+};
+
 export type Output = {
   name: string;
   output: Float32Array[];
   expected?: Float32Array[];
   passed: boolean;
+  params: string[];
+  ui: UIItem[];
+  node: ControlNode;
 };
 
-const cache = new Map<DspDefinitionOffline, Output[]>();
+const cache = new Map<DspDefinitionOffline, OfflineRenderOutput[]>();
 
-export async function faustOfflineRender(
-  dspDefinition: DspDefinitionOffline
-): Promise<Output[]> {
-  const resultFromCache = cache.get(dspDefinition);
-  if (resultFromCache) return resultFromCache;
+async function faustOfflineRender(
+  dspDefinition: DspDefinitionOffline,
+  params: Record<string, number> | null
+): Promise<OfflineRenderOutput[]> {
+  // const resultFromCache = cache.get(dspDefinition);
+  // if (resultFromCache) return resultFromCache;
 
   const {
     outputLength,
@@ -40,6 +84,7 @@ export async function faustOfflineRender(
     inputFile,
     output = ["process"],
     expect,
+    inputOffset,
   } = dspDefinition;
 
   let { input = [] } = dspDefinition;
@@ -77,15 +122,32 @@ export async function faustOfflineRender(
         input = toAudioArray(audioBuffer);
       }
 
+      if (inputOffset) {
+        input = input.map((i) => i.slice(inputOffset));
+      }
+
+      input = input.map((i) => i.slice(0, outputLength));
+
       console.log("input:");
       logChannels(input ?? [], console.log);
 
       const node = await compile(offlineContext, dspToCompile);
+      const paramsFromNode = node.getParams();
+      const { ui } = node;
+
+      if (params) {
+        setParamsOnNode(params, ui, node);
+      }
 
       if (input.length === 0) {
         node.connect(offlineContext.destination);
       } else {
-        playBuffer(await toAudioBuffer(input, offlineContext), offlineContext);
+        const source: AudioBufferSourceNode =
+          offlineContext.createBufferSource();
+        source.buffer = await toAudioBuffer(input, offlineContext);
+        source.connect(node);
+        node.connect(offlineContext.destination);
+        source.start();
       }
 
       const renderedBuffer = await offlineContext.startRendering();
@@ -98,6 +160,8 @@ export async function faustOfflineRender(
         passed = JSON.stringify(output) === JSON.stringify(expected);
       }
 
+      const initialParams = addToParamsObject({}, ui, node);
+
       node.destroy();
 
       return {
@@ -105,6 +169,9 @@ export async function faustOfflineRender(
         output,
         expected,
         passed,
+        params: paramsFromNode,
+        ui,
+        initialParams,
       };
     }, Promise.resolve({}))
   );
@@ -117,13 +184,14 @@ export function useFaustOfflineRenderer(
   dspDefinition: DspDefinition
 ): Output[] | undefined {
   const [output, setOutput] = useState<Output[] | undefined>(undefined);
+  const [params, setParams] = useState<Record<string, number> | null>(null);
   const isStartedRef = useRef(false);
 
   useEffect(() => {
-    if (isStartedRef.current || !isDspOffline(dspDefinition)) return;
+    if (!isDspOffline(dspDefinition)) return;
     isStartedRef.current = true;
 
-    faustOfflineRender(dspDefinition).then((output) => {
+    faustOfflineRender(dspDefinition, params).then((output) => {
       output.forEach((item) => {
         console.log(`${item.name}:`);
         logChannels(item.output, console.log);
@@ -134,9 +202,24 @@ export function useFaustOfflineRenderer(
         }
       });
 
-      setOutput(output);
+      const { initialParams } = output[0];
+      if (!params && output.length > 0) {
+        setParams(initialParams);
+      }
+
+      const node: ControlNode = {
+        getParamValue: (path: string) =>
+          params ? params[path] : initialParams[path],
+        setParamValue: (path: string, value: number) => {
+          setParams((params) => ({ ...params, [path]: value }));
+        },
+        getOutputValue: (path: string) =>
+          params ? params[path] : initialParams[path],
+      };
+
+      setOutput(output.map((item) => ({ ...item, node })));
     });
-  }, [dspDefinition]);
+  }, [dspDefinition, params]);
 
   return output;
 }
