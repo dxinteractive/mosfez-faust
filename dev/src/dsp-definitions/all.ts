@@ -26,6 +26,8 @@ import zeroCrossingDetection from "./23-zero-crossing-detection";
 import pitchtracker from "./24-pitchtracker";
 import autocorrelation from "./25-autocorrelation";
 import envelopeDetector from "./26-envelope-detector";
+import echoloop from "./30-echoloop";
+import echoloopLive from "./31-echoloop-live";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -54,4 +56,6 @@ export const all: DspDefinition[] = [
   pitchtracker,
   autocorrelation,
   envelopeDetector,
+  echoloop,
+  echoloopLive,
 ];
