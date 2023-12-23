@@ -18,7 +18,7 @@ wet(x) = x * wet_volume;
 
 dsp(l, r) = (l + r * 0.5), (r : right_channel_delay);
 
-loop(dsp, fb, l) = (l, fb : dsp), fb;
+loop(dsp, fb, x) = (x, fb : dsp), fb;
 lr(l, r) = r, l;
 alchemist(dsp, x) = x : loop(dsp) ~ fb_loop : !,_,_ : lr;
 

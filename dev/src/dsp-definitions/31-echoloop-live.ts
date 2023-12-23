@@ -1,12 +1,5 @@
 import type { DspDefinition } from "../types";
 
-// L -> send -> sum ---> L
-//               ^
-//            delay(main)
-// R ------------+---- delay(offset) -> R
-
-// foo[OWL:A], bar[OWL:B]
-
 const dsp = `
 import("stdfaust.lib");
 
@@ -47,25 +40,28 @@ bitcrusher(nbits,x) = return with {
 // params
 //
 
-dry_volume_param = hslider("dry", 1.0, 0.0, 1.0, 0.01);
-wet_volume_param = hslider("wet", 0.5, 0.0, 1.0, 0.01);
+dry_volume_param = hslider("dry", 0.0, 0.0, 1.0, 0.01);
+wet_volume_param = hslider("wet", 1.0, 0.0, 1.0, 0.01);
 
 button_alt = checkbox("alt[OWL:B1]");
 button_snapshot = button("snapshot[OWL:B2]");
 
-time_param = hslider("time[OWL:A]", 500.0, 0.0, 1000.0, 0.1);
-feedback_param = hslider("feedback[OWL:B]", 0.5, 0.0, 1.0, 0.01);
+time_param = hslider("time[OWL:A]", 500.0, 0.0, 1000.0, 0.1) : si.smoo;
+ping_pong_spacing_param = hslider("pingpong[TEMP]", 0.5, 0.0, 1.0, 0.01) : si.smoo;
+feedback_param = hslider("feedback[OWL:B]", 0.5, 0.0, 1.0, 0.01) : si.smoo;
 
 //
 // param layers
 //
 
-delay_left_time = time_param : layerValue(500.0, button_alt, 0, 10.0) * 0.001 * ma.SR;
-delay_right_time = time_param : layerValue(250.0, button_alt, 1, 10.0) * 0.001 * ma.SR;
+// superseded
+// delay_left_time = time_param : layerValue(500.0, button_alt, 0, 10.0);
+// delay_right_time = time_param : layerValue(250.0, button_alt, 1, 10.0);
 
-delay_left = de.delay(ma.SR, delay_left_time);
-delay_right = de.delay(ma.SR, delay_right_time);
+delay_a_time = time_param * (1.0 - ping_pong_spacing_param);
+delay_b_time = time_param * ping_pong_spacing_param;
 
+send_amount = 1.0; // TODO make a param
 feedback_amount = feedback_param : layerValue(0.5, button_alt, 0, 0.05);
 bitcrush_amount = feedback_param : layerValue(1.0, button_alt, 1, 0.05);
 
@@ -73,8 +69,19 @@ bitcrush_amount = feedback_param : layerValue(1.0, button_alt, 1, 0.05);
 // dsp
 //
 
-feedback_path(x) = (x * feedback_amount) : delay_left : bitcrusher(bitcrush_amount * 16.0);
-dsp(l, r) = (l + (r : feedback_path)), (r : delay_right);
+delay(t) = de.delay(ma.SR, t * 0.001 * ma.SR);
+delay_a = delay(delay_a_time);
+delay_b = delay(delay_b_time);
+
+dsp(l, r) = out
+with {
+  in_l = l;
+  in_r = r;
+  feedback = in_r : *(feedback_amount) : delay_b : bitcrusher(bitcrush_amount * 16.0);
+  out_l = in_l : *(send_amount) : +(feedback) : delay_a;
+  out_r = in_r : delay_b;
+  out = out_l,out_r;
+};
 
 //
 // simulated feedback loop
@@ -86,7 +93,7 @@ feedback_loop = _;
 // routing
 //
 
-loop(dsp, fb, l) = (l, fb : dsp), fb;
+loop(dsp, fb, x) = (x, fb : dsp), fb;
 lr(l, r) = r, l;
 alchemist(dsp, x) = x : loop(dsp) ~ feedback_loop : !,_,_ : lr;
 

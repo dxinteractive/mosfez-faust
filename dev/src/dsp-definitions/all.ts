@@ -26,6 +26,8 @@ import zeroCrossingDetection from "./23-zero-crossing-detection";
 import pitchtracker from "./24-pitchtracker";
 import autocorrelation from "./25-autocorrelation";
 import envelopeDetector from "./26-envelope-detector";
+import pitchtracker2 from "./27-pitchtracker-2";
+import averageSince from "./28-average-since";
 import echoloop from "./30-echoloop";
 import echoloopLive from "./31-echoloop-live";
 
@@ -56,6 +58,8 @@ export const all: DspDefinition[] = [
   pitchtracker,
   autocorrelation,
   envelopeDetector,
+  pitchtracker2,
+  averageSince,
   echoloop,
   echoloopLive,
 ];
