@@ -35,8 +35,8 @@ const dspDefinition: DspDefinition = {
   type: "offline",
   output: ["input", "pitch", "pitch_clean", "osc"],
   inputFile: "/audio/cycfi-q-pitch-test/Hammer-Pull High E.wav",
-  // inputOffset: 30400,
-  outputLength: 88200,
+  inputOffset: 26000,
+  outputLength: 26000,
   sampleRate: 48000,
   channels: 1,
 };

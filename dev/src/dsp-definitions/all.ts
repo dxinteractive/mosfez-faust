@@ -28,8 +28,11 @@ import autocorrelation from "./25-autocorrelation";
 import envelopeDetector from "./26-envelope-detector";
 import pitchtracker2 from "./27-pitchtracker-2";
 import averageSince from "./28-average-since";
+import autocorrelation2 from "./29-autocorrelation-2";
 import echoloop from "./30-echoloop";
 import echoloopLive from "./31-echoloop-live";
+import minSince from "./32-min-since";
+import pitchtracker3 from "./33-pitchtracker-3";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -60,6 +63,9 @@ export const all: DspDefinition[] = [
   envelopeDetector,
   pitchtracker2,
   averageSince,
+  autocorrelation2,
   echoloop,
   echoloopLive,
+  minSince,
+  pitchtracker3,
 ];
