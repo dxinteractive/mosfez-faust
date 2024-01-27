@@ -34,6 +34,7 @@ import echoloopLive from "./31-echoloop-live";
 import minSince from "./32-min-since";
 import pitchtracker3 from "./33-pitchtracker-3";
 import additiveSynth from "./34-additive-synth";
+import recordedGuitar from "./35-recorded-guitar";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -70,4 +71,5 @@ export const all: DspDefinition[] = [
   minSince,
   pitchtracker3,
   additiveSynth,
+  recordedGuitar,
 ];
