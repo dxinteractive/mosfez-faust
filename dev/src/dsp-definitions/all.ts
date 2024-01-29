@@ -35,6 +35,7 @@ import minSince from "./32-min-since";
 import pitchtracker3 from "./33-pitchtracker-3";
 import additiveSynth from "./34-additive-synth";
 import recordedGuitar from "./35-recorded-guitar";
+import wizardDelay from "./36-wizard-delay";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -72,4 +73,5 @@ export const all: DspDefinition[] = [
   pitchtracker3,
   additiveSynth,
   recordedGuitar,
+  wizardDelay,
 ];

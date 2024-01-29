@@ -7,6 +7,8 @@ import { audioSource } from "mosfez-faust/audio-source";
 import { fetchFile } from "./fetch";
 import { toAudioBuffer } from "mosfez-faust/convert";
 
+let total = 0;
+
 export type UseFaustLivePlayerResult = {
   ui: UIItem[];
   params: string[];
@@ -19,19 +21,16 @@ export function useFaustLivePlayer(
   audioContext: AudioContext,
   dspDefinition: DspDefinition
 ): UseFaustLivePlayerResult | undefined {
-  const effectCountRef = useRef(0);
   const audioNode = useRef<FaustNode>();
   const [result, setResult] = useState<UseFaustLivePlayerResult | undefined>();
 
   useEffect(() => {
-    if (!isDspLive(dspDefinition)) return;
-    const count = ++effectCountRef.current;
+    if (!isDspLive(dspDefinition) || total >= 1) return;
+    total++;
 
     let source: MediaStreamAudioSourceNode | AudioBufferSourceNode | undefined;
 
     compile(audioContext, dspDefinition.dsp).then(async (node) => {
-      if (effectCountRef.current !== count) return;
-
       const { inputFile, inputOffset = 0, loopLength = 0 } = dspDefinition;
 
       if (node.numberOfInputs > 0) {
@@ -50,11 +49,12 @@ export function useFaustLivePlayer(
           if (inputOffset) {
             source.loopStart = inputOffset;
             source.loop = true;
-            if (loopLength) {
-              source.loopEnd = inputOffset + loopLength;
-            }
           }
-          source.start(inputOffset);
+          if (loopLength) {
+            source.loopEnd = loopLength;
+            source.loop = true;
+          }
+          source.start(0, inputOffset);
         } else {
           source = await audioSource(audioContext);
           source.connect(node);
@@ -78,13 +78,14 @@ export function useFaustLivePlayer(
     });
 
     return () => {
+      total--;
       if (audioNode.current) {
         audioNode.current.disconnect();
         audioNode.current.destroy();
+      }
 
-        if (source && source instanceof AudioBufferSourceNode) {
-          source.stop();
-        }
+      if (source && source instanceof AudioBufferSourceNode) {
+        source.stop();
       }
     };
   }, [dspDefinition]);

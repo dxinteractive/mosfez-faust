@@ -2,22 +2,18 @@ import type { DspDefinition } from "../types";
 
 const dsp = `
 import("stdfaust.lib");
-process = _;
+process = _ <: *(1.0),*(1.0);
 `;
-
-const files = {
-  a: "/audio/freesound/667253__garuda1982__electric-guitar-melody-2.mp3",
-  b: "/audio/freesound/706196__garuda1982__sad-electric-guitar-loop-for-background-music.wav",
-};
 
 const dspDefinition: DspDefinition = {
   id: "recorded-guitar",
   name: "Recorded guitar",
   description:
-    "Plays a freesound recording of a guitar sound from garuda1982 with no alterations",
+    "Plays a freesound recording of a guitar sound from yellowtree with no alterations",
   dsp,
   type: "live",
-  inputFile: files.b,
+  inputFile: "/audio/freesound/584282__yellowtree__clean-guitar-loop.wav",
+  loopLength: 20,
 };
 
 export default dspDefinition;
