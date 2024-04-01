@@ -36,6 +36,8 @@ import pitchtracker3 from "./33-pitchtracker-3";
 import additiveSynth from "./34-additive-synth";
 import recordedGuitar from "./35-recorded-guitar";
 import wizardDelay from "./36-wizard-delay";
+import filterBank from "./37-filter-bank";
+import cloudify from "./38-cloudify";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -74,4 +76,6 @@ export const all: DspDefinition[] = [
   additiveSynth,
   recordedGuitar,
   wizardDelay,
+  filterBank,
+  cloudify,
 ];
