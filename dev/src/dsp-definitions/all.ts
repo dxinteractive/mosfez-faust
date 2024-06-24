@@ -38,6 +38,7 @@ import recordedGuitar from "./35-recorded-guitar";
 import wizardDelay from "./36-wizard-delay";
 import filterBank from "./37-filter-bank";
 import cloudify from "./38-cloudify";
+import autosampler from "./39-autosampler";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -78,4 +79,5 @@ export const all: DspDefinition[] = [
   wizardDelay,
   filterBank,
   cloudify,
+  autosampler,
 ];
