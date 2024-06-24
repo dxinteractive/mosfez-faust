@@ -22,7 +22,6 @@ env_on = env_active : ba.impulsify;
 gated = input * env_active;
 
 env_active_timer = env_active : invert_boolean : ba.countup(table_size);
-env_active_forever = env_on : ba.on_and_off(_, 0) : >(0);
 env_active_sweep = env_active_timer : ba.sweep(table_size);
 
 record_head = env_active_sweep * (env_active_sweep <= sampling_time * 2);
@@ -33,9 +32,7 @@ vol(v) = cos(v * ma.PI * 2.0) * -0.5 + 0.5;
 
 table(pb, x) = rwtable(table_size, 0.0, record_head(x), x, pb(x)) * vol(pb(x) / sampling_time);
 fx(x) = table(playback_head, x) + table(playback_head2, x) + (x * max(0.0, 1.0 - (env_active_sweep / sampling_time) * 2.0));
-
-repeat = fx;
-
+process = fx;
 `;
 
 const dspDefinition: DspDefinition = {
@@ -47,13 +44,9 @@ const dspDefinition: DspDefinition = {
   inputFile: "/audio/cycfi-q-pitch-test/GLines3.wav",
   channels: 1,
   sampleRate: 48000,
-  outputLength: 48000 * 5,
-  output: ["gated", "playback_head", "playback_head2", "repeat"],
-  inputOffset: 18000 + 13000,
+  output: ["env_active", "process"],
+  outputLength: 48000 * 20,
+  inputOffset: 18000 + 13000 + 300000,
 };
 
 export default dspDefinition;
-
-//
-// playback_head_double = ((env_active_sweep - 1) % sampling_time_2) + 1;
-// playback_head2(x) = ba.if(playback_head_double(x) <= sampling_time, playback_head_double(x), sampling_time_2 - playback_head_double(x) + 1);
