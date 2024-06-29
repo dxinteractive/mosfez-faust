@@ -40,6 +40,8 @@ import filterBank from "./37-filter-bank";
 import cloudify from "./38-cloudify";
 import autosampler from "./39-autosampler";
 import pulseDelay from "./40-pulse-delay";
+import autosampler2 from "./41-autosampler-2";
+import multibandFilter from "./42-multiband-filter";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -82,4 +84,6 @@ export const all: DspDefinition[] = [
   cloudify,
   autosampler,
   pulseDelay,
+  autosampler2,
+  multibandFilter,
 ];
