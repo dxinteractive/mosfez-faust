@@ -177,7 +177,9 @@ export function Plot(props: PlotProps) {
     startDragPan.current = pan;
   };
 
-  const handleWheel = (e: React.WheelEvent<HTMLCanvasElement>) => {
+  const handleWheel = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
     const { pixelY } = normalizeWheel(e);
     const dir = pixelY < 0 ? 2 : 0.5;
     setPlotState(([p, z, h]) => {
@@ -208,6 +210,8 @@ export function Plot(props: PlotProps) {
     const canvas = canvasRef.current;
     const drawContext = canvas?.getContext("2d");
 
+    canvas?.addEventListener("wheel", handleWheel);
+
     if (drawContext) {
       drawContext.clearRect(0, 0, width, height);
       const max = width / zoomWidth;
@@ -227,7 +231,19 @@ export function Plot(props: PlotProps) {
         drawContext.fillRect(px, Math.round(y), pw, 1);
       }
     }
-  }, [output, width, height, highlight, pan, zoomWidth, zoomHeight]);
+    return () => {
+      canvas?.removeEventListener("wheel", handleWheel);
+    };
+  }, [
+    output,
+    width,
+    height,
+    highlight,
+    pan,
+    zoomWidth,
+    zoomHeight,
+    handleWheel,
+  ]);
 
   return (
     <canvas
@@ -237,7 +253,6 @@ export function Plot(props: PlotProps) {
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerOut={handlePointerOut}
-      onWheel={handleWheel}
     />
   );
 }

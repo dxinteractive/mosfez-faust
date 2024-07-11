@@ -9,6 +9,9 @@ export type DspDefinitionCommon = {
 export type DspDefinitionLive = DspDefinitionCommon & {
   type: "live";
   dsp: string;
+  inputOffset?: number;
+  inputFile?: string;
+  loopLength?: number;
 };
 
 export type DspDefinitionOffline = DspDefinitionCommon & {

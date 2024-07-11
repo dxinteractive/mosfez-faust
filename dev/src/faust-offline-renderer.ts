@@ -114,7 +114,7 @@ async function faustOfflineRender(
       if (inputFile) {
         const response = await fetchFile(inputFile);
         if (!response.ok) {
-          throw new Error(`Could not load sound file "${input}"`);
+          throw new Error(`Could not load sound file "${inputFile}"`);
         }
         const arrayBuffer = await response.arrayBuffer();
         const audioBuffer = await toAudioBuffer(arrayBuffer, offlineContext);

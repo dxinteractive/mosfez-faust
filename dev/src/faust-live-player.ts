@@ -4,12 +4,16 @@ import { DspDefinition, isDspLive } from "./types";
 import { compile, FaustNode } from "mosfez-faust/faust";
 import type { UIItem } from "mosfez-faust/faust";
 import { audioSource } from "mosfez-faust/audio-source";
+import { fetchFile } from "./fetch";
+import { toAudioBuffer } from "mosfez-faust/convert";
+
+let total = 0;
 
 export type UseFaustLivePlayerResult = {
   ui: UIItem[];
   params: string[];
   node: FaustNode;
-  source?: MediaStreamAudioSourceNode;
+  source?: MediaStreamAudioSourceNode | AudioBufferSourceNode;
   audioContext?: AudioContext;
 };
 
@@ -17,22 +21,44 @@ export function useFaustLivePlayer(
   audioContext: AudioContext,
   dspDefinition: DspDefinition
 ): UseFaustLivePlayerResult | undefined {
-  const effectCountRef = useRef(0);
   const audioNode = useRef<FaustNode>();
   const [result, setResult] = useState<UseFaustLivePlayerResult | undefined>();
 
   useEffect(() => {
-    if (!isDspLive(dspDefinition)) return;
-    const count = ++effectCountRef.current;
+    if (!isDspLive(dspDefinition) || total >= 1) return;
+    total++;
+
+    let source: MediaStreamAudioSourceNode | AudioBufferSourceNode | undefined;
 
     compile(audioContext, dspDefinition.dsp).then(async (node) => {
-      if (effectCountRef.current !== count) return;
-
-      let source: MediaStreamAudioSourceNode | undefined;
+      const { inputFile, inputOffset = 0, loopLength = 0 } = dspDefinition;
 
       if (node.numberOfInputs > 0) {
-        source = await audioSource(audioContext);
-        source.connect(node);
+        if (inputFile) {
+          const response = await fetchFile(inputFile);
+          if (!response.ok) {
+            throw new Error(`Could not load sound file "${inputFile}"`);
+          }
+          const arrayBuffer = await response.arrayBuffer();
+
+          source = audioContext.createBufferSource();
+
+          source.buffer = await toAudioBuffer(arrayBuffer, audioContext);
+          source.connect(node);
+          node.connect(audioContext.destination);
+          if (inputOffset) {
+            source.loopStart = inputOffset;
+            source.loop = true;
+          }
+          if (loopLength) {
+            source.loopEnd = loopLength;
+            source.loop = true;
+          }
+          source.start(0, inputOffset);
+        } else {
+          source = await audioSource(audioContext);
+          source.connect(node);
+        }
       }
 
       node.connect(audioContext.destination);
@@ -52,9 +78,14 @@ export function useFaustLivePlayer(
     });
 
     return () => {
+      total--;
       if (audioNode.current) {
         audioNode.current.disconnect();
         audioNode.current.destroy();
+      }
+
+      if (source && source instanceof AudioBufferSourceNode) {
+        source.stop();
       }
     };
   }, [dspDefinition]);
