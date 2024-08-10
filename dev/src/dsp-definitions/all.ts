@@ -42,6 +42,8 @@ import autosampler from "./39-autosampler";
 import pulseDelay from "./40-pulse-delay";
 import autosampler2 from "./41-autosampler-2";
 import multibandFilter from "./42-multiband-filter";
+import c4BlopsLive from "./43-c4-blops-live";
+import c4Blops from "./44-c4-blops";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -86,4 +88,6 @@ export const all: DspDefinition[] = [
   pulseDelay,
   autosampler2,
   multibandFilter,
+  c4BlopsLive,
+  c4Blops,
 ];
