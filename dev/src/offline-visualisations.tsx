@@ -29,7 +29,7 @@ type PlotPanelProps = {
 export function PlotPanel(props: PlotPanelProps) {
   const { name, offlineResult, width, height, liveAudioContext } = props;
 
-  const [[pan, zoomWidth, highlight], setPlotState] = useState([0, 8, -1]);
+  const [[pan, zoomWidth, highlight], setPlotState] = useState([0, 4, -1]);
 
   const offlineResultFlattened: Output[] = [];
   offlineResult.forEach((output) => {
@@ -72,11 +72,39 @@ export function PlotPanel(props: PlotPanelProps) {
           downloadWav(output.output, liveAudioContext, filename);
         };
 
+        const handleZoomIn = (e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.preventDefault();
+          setPlotState(([p, z, h]) => [p, z * 2, h]);
+        };
+
+        const handleZoomOut = (e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.preventDefault();
+          setPlotState(([p, z, h]) => [p, z / 2, h]);
+        };
+
         return (
           <div className={classes.plot} key={i}>
             <div className={classes.plotHeader}>
               <div className={classes.plotHeaderLeft}>
                 {output.name} {highlightValue}
+              </div>
+              <div className={classes.plotHeaderRight}>
+                <a
+                  href="#"
+                  className={classes.plotHeaderLink}
+                  onClick={handleZoomIn}
+                >
+                  +
+                </a>
+              </div>
+              <div className={classes.plotHeaderRight}>
+                <a
+                  href="#"
+                  className={classes.plotHeaderLink}
+                  onClick={handleZoomOut}
+                >
+                  -
+                </a>
               </div>
               <div className={classes.plotHeaderRight}>
                 <a
