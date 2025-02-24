@@ -45,6 +45,7 @@ import multibandFilter from "./42-multiband-filter";
 import c4BlopsLive from "./43-c4-blops-live";
 import c4Blops from "./44-c4-blops";
 import alchemistPrototype from "./45-alchemist-prototype";
+import noiseRejection from "./46-noise-rejection";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -92,4 +93,5 @@ export const all: DspDefinition[] = [
   c4BlopsLive,
   c4Blops,
   alchemistPrototype,
+  noiseRejection,
 ];
