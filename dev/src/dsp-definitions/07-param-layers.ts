@@ -16,7 +16,7 @@ layerIsAwake(l,x,t) = return with {
 };
 
 layerValue(l,i,t,x) = return with {
-  return = x : sAndHWithDefault(0.5, (l == i) & layerIsAwake(l,knob,t));
+  return = x : sAndHWithDefault(0.5, (l == i) & layerIsAwake(l,x,t));
 };
 
 layer = hslider("layer", 0.0, 0.0, 2.0, 1.0);

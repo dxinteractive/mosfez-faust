@@ -46,6 +46,7 @@ import c4BlopsLive from "./43-c4-blops-live";
 import c4Blops from "./44-c4-blops";
 import alchemistPrototype from "./45-alchemist-prototype";
 import noiseRejection from "./46-noise-rejection";
+import autolooper from "./47-autolooper";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -94,4 +95,5 @@ export const all: DspDefinition[] = [
   c4Blops,
   alchemistPrototype,
   noiseRejection,
+  autolooper,
 ];
