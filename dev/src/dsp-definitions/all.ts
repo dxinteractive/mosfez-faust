@@ -48,6 +48,7 @@ import alchemistPrototype from "./45-alchemist-prototype";
 import noiseRejection from "./46-noise-rejection";
 import autolooper from "./47-autolooper";
 import alchemistPrototype2 from "./48-alchemist-prototype-2";
+import alchemistPrototype3 from "./49-alchemist-prototype-3";
 
 export const all: DspDefinition[] = [
   sineWave,
@@ -98,4 +99,5 @@ export const all: DspDefinition[] = [
   noiseRejection,
   autolooper,
   alchemistPrototype2,
+  alchemistPrototype3,
 ];
