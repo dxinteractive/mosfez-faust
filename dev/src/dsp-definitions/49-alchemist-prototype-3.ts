@@ -17,11 +17,9 @@ synth(gate) = ba.midikey2hz : os.triangle : *(gate) : *(0.2);
 gtr_synth = tunePlayer(tune1) : synth;
 bass_synth = tunePlayer(tune2) : synth;
 
-// alchemist.dsp
 //
-//   B
-// A   C
-//   D
+// alchemist.dsp - bass compressor only
+//
 
 // utils
 
@@ -62,34 +60,37 @@ layerValue(l,i,t,x) = return with {
   return = x : sAndHWithDefault(0.5, (l == i) & layerIsAwake(l,x,t));
 };
 
-sine(rate) = os.osc(rate) + 1. * .5;
-
 // consts
 
-chorus_voice_count = 5;
-// ...
-
 // input
+//
+//   B
+// A   C
+//   D
 
-// lag_param = hslider("lag[OWL:A]", 0.5, 0.0, 1.0, 0.001) : reject_noise(0.05, 1.0) : si.smoo;
-// shape_param = hslider("shape[OWL:B]", 0, 0, shape_count, 1) : int;
-// trem_param = hslider("trem[OWL:D]", 0.5, 0.0, 1.0, 0.001) : reject_noise(0.05, 1.0) : si.smoo;
-// depth_param = hslider("depth[OWL:C]", 0.5, 0.0, 1.0, 0.001) : reject_noise(0.05, 1.0) : si.smoo;
-// width_button = button("width[OWL:B1]");
-// alt_button = button("alt[OWL:B2]");
+detune_param = hslider("detune[OWL:A]", 0., 0., .2, .001) : si.smoo;
+wet_param = hslider("wet[OWL:B]", 0., 0., 1., .01) : si.smoo;
 
-// effects
+// TODO trem
+// TODO autopan / width options
+// TODO chorus width?
+// TODO parked reverb?
+// TODO modulate pitch shift?
+// TODO adjust relative pitch shift?
 
-// chorus_offset(i) = sine(5.0 + i) + sine(2.3 + i * .5) + sine(5.7 + i * .2) : /(3.);
+// foo_button = button("foo[OWL:B1]");
+// bar_button = button("bar[OWL:B2]");
 
-chorus_offset(i) = sine(5.0 + i);
-chorus_voice(i) = de.fdelay(3000, chorus_offset(i * .1) * 10.) <: _,_;
-chorus(x) = x <: par(i, chorus_voice_count, chorus_voice(i)) :> /(chorus_voice_count),/(chorus_voice_count);
+// fx
 
-// routing
+fx = ef.transpose(ma.SR * .003, ma.SR * .003 * .9, -detune_param);
+fx2 = ef.transpose(ma.SR * .0041, ma.SR * .0041 * .9, -detune_param * .5);
+gtr = *(wet_param) <: fx,fx2 : _,_;
 
-gtr = _ : chorus : _,_;
-bass =  _ <: _,_;
+bass_gate = ef.gate_mono(-64., .005, 0., 1.);
+bass_comp = co.compressor_mono(32., -34., 0., .4);
+bass_makeup =  *(5.);
+bass = bass_gate : bass_comp : bass_makeup <: _,_;
 
 amp = *(3.0);
 process = gtr_synth,bass_synth : gtr,bass :> amp,amp;
@@ -104,3 +105,67 @@ const dspDefinition: DspDefinition = {
 };
 
 export default dspDefinition;
+
+/**
+ * PARAMS:
+ *
+ * detune = - vol 20%: depth 0 ... 100%
+ *          - vol 50%: depth 0 ... 100%
+ *          - vol 100%: depth 0 ... 100%
+ *
+ * trem = - depth 50%: rate .2Hz ... 10Hz
+ *        - depth 100%: rate .2Hz ... 10Hz
+ *        - ??? randomise depth?
+ *
+ * width = - straight: mono ... stereo
+ *         - autopan: slow ... fast
+ *         - offset: 0ms ... 500ms
+ *         - ping pong: 0ms ... 500ms
+ *
+ * sidechain = - volume decrease: 0 ... 100%
+ *
+ * BUTTONS:
+ *
+ * A:
+ *   - tap: enable / disable chorus
+ *   - hold + B: select sidechain mode?
+ *               - volume
+ *               - low pass
+ *               - high pass
+ *               - reverb swell ??????
+ *
+ * B:
+ *   - tap: enable / disable trem
+ *   - hold + A:
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * */
