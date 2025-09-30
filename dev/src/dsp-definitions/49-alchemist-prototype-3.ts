@@ -67,9 +67,18 @@ layerValue(l,i,t,x) = return with {
 //   B
 // A   C
 //   D
+//
+//     * detune
+// * side * trem
+//     * width
 
-detune_param = hslider("detune[OWL:A]", 0., 0., .2, .001) : si.smoo;
-wet_param = hslider("wet[OWL:B]", 0., 0., 1., .01) : si.smoo;
+sidechain_param = hslider("sidechain[OWL:A]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+detune_param = hslider("detune[OWL:B]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+trem_param = hslider("trem[OWL:C]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+width_param = hslider("width[OWL:D]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+
+detune_on = button("detune_on[OWL:B1]") : ba.toggle;
+trem_on = button("trem_on[OWL:B2]") : ba.toggle;
 
 // TODO trem
 // TODO autopan / width options
@@ -78,18 +87,28 @@ wet_param = hslider("wet[OWL:B]", 0., 0., 1., .01) : si.smoo;
 // TODO modulate pitch shift?
 // TODO adjust relative pitch shift?
 
-// foo_button = button("foo[OWL:B1]");
-// bar_button = button("bar[OWL:B2]");
-
 // fx
+wet_amount_detune = ba.if(detune_param < 2/3, ba.if(detune_param < 1/3, .1, .3), .5);
+wet_amount = ba.if(detune_on, wet_amount_detune, 1.);
+detune_amount = detune_param : *(3.) : %(1.) : *(.2);
 
-fx = ef.transpose(ma.SR * .003, ma.SR * .003 * .9, -detune_param);
-fx2 = ef.transpose(ma.SR * .0041, ma.SR * .0041 * .9, -detune_param * .5);
-gtr = *(wet_param) <: fx,fx2 : _,_;
+gtr_detune_l = ef.transpose(ma.SR * .003, ma.SR * .003 * .9, -detune_amount);
+gtr_detune_r = ef.transpose(ma.SR * .0041, ma.SR * .0041 * .9, -detune_amount * .5);
+gtr_detune_lr = gtr_detune_l,gtr_detune_r;
+gtr_detune = ba.bypass2(detune_on : ==(0), gtr_detune_lr);
+
+trem_depth = ba.if(trem_param < 2/3, ba.if(trem_param < 1/3, .3, .6), 1.);
+trem_speed = trem_param : *(3.) : %(1.) : lerp(-2., 4.) : pow(2.);
+
+gtr_trem_gain = lerp(1. - trem_depth, 1. + trem_depth, os.osc(trem_speed) * .5 + .5);
+gtr_trem_l = *(gtr_trem_gain);
+gtr_trem = ba.bypass1(trem_on : ==(0), gtr_trem_l);
+
+gtr = *(wet_amount) : gtr_trem <: gtr_detune : _,_;
 
 bass_gate = ef.gate_mono(-64., .005, 0., 1.);
 bass_comp = co.compressor_mono(32., -34., 0., .4);
-bass_makeup =  *(5.);
+bass_makeup =  *(3.);
 bass = bass_gate : bass_comp : bass_makeup <: _,_;
 
 amp = *(3.0);
