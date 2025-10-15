@@ -18,7 +18,7 @@ gtr_synth = tunePlayer(tune1) : synth;
 bass_synth = tunePlayer(tune2) : synth;
 
 //
-// alchemist.dsp - bass compressor only
+// alchemist.dsp - bass compressor, trem, detune
 //
 
 // utils
@@ -80,12 +80,8 @@ width_param = hslider("width[OWL:D]", 0., 0., 1., .001) : reject_noise(0.05, 1.0
 detune_on = button("detune_on[OWL:B1]") : ba.toggle;
 trem_on = button("trem_on[OWL:B2]") : ba.toggle;
 
-// TODO trem
-// TODO autopan / width options
-// TODO chorus width?
-// TODO parked reverb?
-// TODO modulate pitch shift?
-// TODO adjust relative pitch shift?
+// TODO sidechain
+// TODO width options
 
 // fx
 wet_amount_detune = ba.if(detune_param < 2/3, ba.if(detune_param < 1/3, .1, .3), .5);
@@ -128,26 +124,30 @@ export default dspDefinition;
 /**
  * PARAMS:
  *
- * detune = - vol 20%: depth 0 ... 100%
+ * detune = - vol 10%: depth 0 ... 100%
+ *          - vol 30%: depth 0 ... 100%
  *          - vol 50%: depth 0 ... 100%
- *          - vol 100%: depth 0 ... 100%
  *
- * trem = - depth 50%: rate .2Hz ... 10Hz
+ * trem = - depth 30%: rate .2Hz ... 10Hz
+ *        - depth 60%: rate .2Hz ... 10Hz
  *        - depth 100%: rate .2Hz ... 10Hz
  *        - ??? randomise depth?
  *
- * width = - straight: mono ... stereo
+ * width = NOT IMPLEMENTED
+ *         - straight: mono ... stereo
  *         - autopan: slow ... fast
  *         - offset: 0ms ... 500ms
  *         - ping pong: 0ms ... 500ms
  *
- * sidechain = - volume decrease: 0 ... 100%
+ * sidechain = NOT IMPLEMENTED
+ *             - volume decrease: 0 ... 100%
  *
  * BUTTONS:
  *
  * A:
- *   - tap: enable / disable chorus
- *   - hold + B: select sidechain mode?
+ *   - tap: enable / disable detune
+ *   - hold + B: NOT IMPLEMENTED
+ *               select sidechain mode?
  *               - volume
  *               - low pass
  *               - high pass
@@ -155,7 +155,7 @@ export default dspDefinition;
  *
  * B:
  *   - tap: enable / disable trem
- *   - hold + A:
+ *   - hold + A: NOT ASSIGNED
  *
  *
  *
