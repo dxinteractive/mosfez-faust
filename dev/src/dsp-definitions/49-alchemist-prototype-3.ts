@@ -204,35 +204,4 @@ export default dspDefinition;
  * B:
  *   - tap: enable / disable trem
  *   - hold + A: NOT ASSIGNED
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
  * */
