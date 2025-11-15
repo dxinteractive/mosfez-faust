@@ -18,7 +18,7 @@ gtr_synth = tunePlayer(tune1) : synth;
 bass_synth = tunePlayer(tune2) : synth;
 
 //
-// alchemist.dsp - bass compressor, trem, detune
+// alchemist.dsp - bass compressor, trem, chorus
 //
 
 // utils
@@ -61,6 +61,13 @@ layerValue(l,i,t,x) = return with {
   return = x : sAndHWithDefault(0.5, (l == i) & layerIsAwake(l,x,t));
 };
 
+shortPress(time, trig) = return with {
+  up_while_press = ba.countup(time, trig == 0);
+  on_release = trig < trig';
+  held_enough = up_while_press < time;
+  return = held_enough' & on_release;
+};
+
 // consts
 
 // input
@@ -69,27 +76,34 @@ layerValue(l,i,t,x) = return with {
 // A   C
 //   D
 //
-//     * detune
-// * side * trem
-//     * width
+//     * trem
+// * side * chorus
+//     * multi
 
 sidechain_param = hslider("sidechain[OWL:A]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
-detune_param = hslider("detune[OWL:B]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
-trem_param = hslider("trem[OWL:C]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
-width_param = hslider("width[OWL:D]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+trem_param = hslider("trem[OWL:B]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+chorus_param = hslider("chorus[OWL:C]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
+multi_param = hslider("multi[OWL:D]", 0., 0., 1., .001) : reject_noise(0.05, 1.0) : si.smoo;
 
-detune_on = button("detune_on[OWL:B1]") : ba.toggle;
-trem_on = button("trem_on[OWL:B2]") : ba.toggle;
+
+
+button_a = button("button_a[OWL:B1]");
+button_b = button("button_b[OWL:B2]");
+button_a_short = button_a : shortPress(ma.SR * .2);
+button_b_short = button_b : shortPress(ma.SR * .2);
 
 // fx
-wet_amount_detune = ba.if(detune_param < 2/3, ba.if(detune_param < 1/3, .1, .3), .5);
-wet_amount = ba.if(detune_on, wet_amount_detune, 1.);
-detune_amount = detune_param : *(3.) : %(1.) : *(.2);
+trem_on = button_a_short : ba.toggle;
+chorus_on = button_b_short : ba.toggle;
 
-gtr_detune_l = ef.transpose(ma.SR * .003, ma.SR * .003 * .9, -detune_amount);
-gtr_detune_r = ef.transpose(ma.SR * .0041, ma.SR * .0041 * .9, -detune_amount * .5);
-gtr_detune_lr = gtr_detune_l,gtr_detune_r;
-gtr_detune = ba.bypass2(detune_on : ==(0), gtr_detune_lr);
+wet_amount_chorus = ba.if(chorus_param < 2/3, ba.if(chorus_param < 1/3, .1, .3), .5);
+wet_amount = ba.if(chorus_on, wet_amount_chorus, 1.);
+chorus_amount = chorus_param : *(3.) : %(1.) : *(.2);
+
+gtr_chorus_l = ef.transpose(ma.SR * .003, ma.SR * .003 * .9, -chorus_amount);
+gtr_chorus_r = ef.transpose(ma.SR * .0041, ma.SR * .0041 * .9, -chorus_amount * .5);
+gtr_chorus_lr = gtr_chorus_l,gtr_chorus_r;
+gtr_chorus = ba.bypass2(chorus_on : ==(0), gtr_chorus_lr);
 
 trem_depth = ba.if(trem_param < 2/3, ba.if(trem_param < 1/3, .3, .6), 1.);
 trem_speed = trem_param : *(3.) : %(1.) : lerp(-2., 4.) : pow(2.);
@@ -102,59 +116,9 @@ gtr_sidechain = ba.lin2LogGain(1. - sidechain_param);
 gtr_gain_amount = wet_amount * gtr_sidechain;
 gtr_gain = *(gtr_gain_amount);
 
-// stereo-wide / stereo-narrow / mono-panned / mono-autopan / offset / pingpong
 
-gtr_width(l,r) = return with {
-  p(a,b,l,r) = return with {
-    gain = (width_param >= a) & (width_param < b);
-    return = l * gain,r * gain;
-  };
 
-  p0 = 0.;
-  p1 = .07;
-  p2 = .13;
-  p3 = .2;
-  p4 = .4;
-  p5 = .6;
-  p6 = .8;
-  p7 = 1.;
-
-  p55 = (p5 + p6) * .5;
-  p65 = (p6 + p7) * .5;
-
-  pan_amount_static = unlerp(p2,p4,width_param);
-  pan_amount_auto = os.osc(unlerp(p4,p5,width_param) : lerp(.01, .5)) * .5 + .5;
-  pan_amount = ba.if(width_param < p4, pan_amount_static, pan_amount_auto);
-
-  del_max = ma.SR;
-
-  d(a,b,x) = return with {
-    gain = (width_param >= a) & (width_param < b);
-    return = x * gain;
-  };
-
-  del_la = unlerp(p55,p6,width_param) : lerp(0.,del_max) : d(p55,p6);
-  del_lb = unlerp(p6,p65,width_param) : lerp(del_max * .5, 0.) : d(p6,p65);
-  del_lc = unlerp(p65,p7,width_param) : lerp(0.,del_max) : d(p65,p7);
-  del_l = del_la + del_lb + del_lc;
-
-  del_ra = unlerp(p5,p55,width_param) : lerp(del_max, 0.) : d(p5,p55);
-  del_rb = unlerp(p6,p65,width_param) : lerp(del_max, 0.) : d(p6,p65);
-  del_rc = unlerp(p65,p7,width_param) : lerp(0., del_max * .5) : d(p65,p7);
-  del_r = del_ra + del_rb + del_rc;
-
-  del_vol = ba.if(width_param < p6, 1., .5);
-
-  stereo = p(p0,p1);
-  narrow(l,r) = l*.75+r*.25,r*.75+l*.25 : p(p1,p2);
-  mono = _,! <: p(p2,p3);
-  pan = constantPowerPan(pan_amount) : p(p3,p5);
-  offset = de.delay(del_max,del_l),de.delay(del_max,del_r) : *(del_vol),*(del_vol) : p(p5,p7);
-  
-  return = l,r <: stereo,narrow,mono,pan,offset :> _,_;
-};
-
-gtr = gtr_gain : gtr_trem <: gtr_detune : gtr_width;
+gtr = gtr_gain : gtr_trem <: gtr_chorus;
 
 bass_gate = ef.gate_mono(-64., .005, 0., 1.);
 bass_comp = co.compressor_mono(32., -34., 0., .4);
@@ -178,7 +142,7 @@ export default dspDefinition;
 /**
  * PARAMS:
  *
- * detune = - vol 10%: depth 0 ... 100%
+ * chorus = - vol 10%: depth 0 ... 100%
  *          - vol 30%: depth 0 ... 100%
  *          - vol 50%: depth 0 ... 100%
  *
@@ -193,7 +157,7 @@ export default dspDefinition;
  * BUTTONS:
  *
  * A:
- *   - tap: enable / disable detune
+ *   - tap: enable / disable chorus
  *   - hold + B: NOT IMPLEMENTED
  *               select sidechain mode?
  *               - volume
